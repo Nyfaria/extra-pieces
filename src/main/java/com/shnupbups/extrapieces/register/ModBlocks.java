@@ -18,11 +18,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-@SuppressWarnings("WeakerAccess")
 public class ModBlocks {
 
-	public static LinkedHashMap<Identifier, PieceSet.Builder> setBuilders = new LinkedHashMap<>();
-	public static LinkedHashSet<PieceSet.Builder> primedBuilders = new LinkedHashSet<>();
+	public static Map<Identifier, PieceSet.Builder> setBuilders = new HashMap<>();
+	public static Set<PieceSet.Builder> primedBuilders = new HashSet<>();
+	public static Map<Identifier, PieceSet> builtSets = new HashMap<>();
 
 	public static LinkedHashMap<Pair<Identifier, Identifier>, Identifier> vanillaPieces = new LinkedHashMap<>();
 
@@ -417,7 +417,30 @@ public class ModBlocks {
 		}
 	}
 
+	public static void buildAndRegister() {
+		//Proactively build and register blocks/items for PieceSets which are able to instantly
+		
+		List<Identifier> identifiers = new ArrayList<>(setBuilders.keySet());
+		for(Identifier id : identifiers) {
+			PieceSet.Builder builder = setBuilders.get(id);
+			if (!builder.isBuilt() && builder.isReady()) {
+				PieceSet set = builder.build();
+				set.register();
+			}
+		}
+	}
+	
 	public static void init(ArtificeResourcePack.ServerResourcePackBuilder data) {
+		/* TODO: This needs to be examined a little more closely but this appears to be an unnecessary O(N^2) operation;
+		 * For each block in the registry it goes through *every* primedBuilder to see if it's ready, and whether or not
+		 * it is, registers an individual RegistryEntryAddedCallback for it that never goes away.
+		 * 
+		 * When complete, this will probably double-check that every builder is removed from primed / ready to remove from
+		 * primed, and finish (which generates the related assets and data)
+		 * 
+		 * 
+		 */
+		
 		visitRegistry(Registries.BLOCK, (id, block) -> {
 			if (!finished) {
 				Iterator<PieceSet.Builder> primed = primedBuilders.iterator();
@@ -429,7 +452,7 @@ public class ModBlocks {
 					if (!builder.isBuilt() && builder.isReady()) {
 						ExtraPieces.moreDebugLog("Block "+id.toString()+" registered, triggering a PSB.");
 						ExtraPieces.debugLog("Deferred PieceSet Builder" + builder + " now ready! Building...");
-						builder.build().register(data);
+						builder.build().register();
 						primed.remove();
 					}
 				}
@@ -438,7 +461,7 @@ public class ModBlocks {
 
 				if (current != null && !current.isBuilt()) {
 					if (current.isReady()) {
-						current.build().register(data);
+						current.build().register();
 					} else {
 						ExtraPieces.debugLog("PieceSet Builder" + current + " not yet ready! Deferring to delayed build...");
 						primedBuilders.add(setBuilders.get(id));
@@ -461,7 +484,7 @@ public class ModBlocks {
 					builder = primed.next();
 
 					if (!builder.isBuilt() && builder.isReady()) {
-						builder.build().register(data);
+						builder.build().register();
 						primed.remove();
 					}
 				}

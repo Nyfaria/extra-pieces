@@ -26,7 +26,7 @@ public class FenceGatePiece extends PieceType {
 
 	@Override
 	public PieceBlock getNew(PieceSet set) {
-		return null;
+		return new FenceGatePieceBlock(set, null, null);
 	}
 
 	public ArrayList<ShapedPieceRecipe> getShapedRecipes() {

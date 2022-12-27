@@ -10,6 +10,7 @@ import com.shnupbups.extrapieces.register.ModConfigs;
 import io.github.vampirestudios.artifice.api.Artifice;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -76,13 +77,30 @@ public class ExtraPieces implements ModInitializer {
 	public void onInitialize() {
 		ModConfigs.init();
 		PieceTypes.init();
+		
 		FabricLoader.getInstance().getEntrypoints("extrapieces", EPInitializer.class).forEach(api -> {
 			debugLog("EPInitializer " + api.toString());
 			api.onInitialize();
 		});
 		ModConfigs.initPiecePacks();
+		//TODO: If we find that registration is going slow, we can pre-populate primedBuilders here and yeet builders as
+		//we finish building them. Then we can scan through fewer sets as we get later into the initialization chain.
+		ModBlocks.buildAndRegister();
+		
+		/* TODO:
+		 * We have some incredibly weird O(n^2) logic elsewhere that boils down to this: When something new is registered,
+		 * it might be the thing we need to build and register a new PieceSet. So trigger a buildAndRegister of anything
+		 * that's pending!
+		 * 
+		 * This should be able to completely replace the other logic - but for now, duplicate calls are checked, so both
+		 * can coexist. Once the data and assets are working properly we can start removing old logic.
+		 */
+		RegistryEntryAddedCallback.event(Registries.BLOCK).register((raw, id, object) -> {
+			ModBlocks.buildAndRegister();
+		});
+		
 		Artifice.registerDataPack(getID("ep_data"), serverResourcePackBuilder -> {
-			ModBlocks.init(serverResourcePackBuilder);
+			ModBlocks.init(serverResourcePackBuilder); //TODO: Get this out of here! At least the block/item registration parts!
 			try {
 				serverResourcePackBuilder.dump(FabricLoader.getInstance().getConfigDir().getParent() + "/dump", "data", ModConfigs.dumpData && ModBlocks.finished);
 			} catch (Exception e) {

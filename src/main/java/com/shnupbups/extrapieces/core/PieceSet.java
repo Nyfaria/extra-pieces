@@ -32,6 +32,8 @@ import net.minecraft.registry.Registries;
 
 import java.util.*;
 
+import org.apache.logging.log4j.core.util.SystemNanoClock;
+
 public class PieceSet {
 	public static final HashSet<PieceType> NO_SLAB;
 	public static final HashSet<PieceType> NO_SLAB_OR_STAIRS;
@@ -288,15 +290,21 @@ public class PieceSet {
 	 * @return This {@link PieceSet}
 	 * @throws IllegalStateException If a {@link PieceSet} has already been registered with the same base {@link Block}
 	 */
-	public PieceSet register(ArtificeResourcePack.ServerResourcePackBuilder data) {
+	public PieceSet register() {
 		if (isRegistered())
 			return this;
 		if (!isGenerated()) generate();
 		for (PieceType type : genTypes) {
 			PieceBlock block = pieces.get(type);
-
+			
 			Identifier id = new Identifier(type.getId().getNamespace(), type.getBlockId(getName()));
-
+			
+			if (block==null) {
+				System.out.println("Cannot register null block "+id);
+				continue;
+			}
+			
+			//System.out.println("Registering "+id);
 			Registry.register(Registries.BLOCK, id, block.getBlock());
 
 			if (this.getBase() != Blocks.AIR) ModItemGroups.getItemGroup(block);
@@ -830,12 +838,12 @@ public class PieceSet {
 		}
 
 		public boolean isReady() {
-			if (Registries.BLOCK.getOrEmpty(base).isEmpty() || Registries.ITEM.getOrEmpty(base).isEmpty()) {
+			if (!Registries.BLOCK.containsId(base) || !Registries.ITEM.containsId(base)) {
 				return false;
 			}
 
 			for (Identifier id : getVanillaPieces().values()) {
-				if (Registries.BLOCK.getOrEmpty(id).isEmpty() || Registries.ITEM.getOrEmpty(id).isEmpty()) {
+				if (!Registries.BLOCK.containsId(id) || !Registries.ITEM.containsId(id)) {
 					return false;
 				}
 			}
