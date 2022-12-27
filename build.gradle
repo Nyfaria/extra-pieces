@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
+	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -12,6 +12,7 @@ group = project.maven_group
 
 repositories {
 	mavenCentral()
+	maven { url = "https://maven.siphalor.de" }
 }
 
 dependencies {
@@ -24,15 +25,12 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Artifice
-	modImplementation "io.github.vampirestudios:artifice:${project.artifice_version}"
-	include "io.github.vampirestudios:artifice:${project.artifice_version}"
+	modImplementation "io.github.vampirestudios:artifice:0.40.0+build.1-1.19.3-EXPERIMENTAL"
+	include "io.github.vampirestudios:artifice:0.40.0+build.1-1.19.3-EXPERIMENTAL"
 
 	// Jankson
-	//modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
-	//include "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
-	
-	modImplementation "blue.endless:jankson:${project.jankson_version}"
-	include "blue.endless:jankson:${project.jankson_version}"
+	modImplementation 'blue.endless:jankson:1.2.0'
+	include 'blue.endless:jankson:1.2.0'
 }
 
 processResources {

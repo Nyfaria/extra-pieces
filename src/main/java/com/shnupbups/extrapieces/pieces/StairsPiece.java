@@ -8,6 +8,8 @@ import com.shnupbups.extrapieces.core.PieceType;
 import com.shnupbups.extrapieces.core.PieceTypes;
 import com.shnupbups.extrapieces.recipe.ShapedPieceRecipe;
 import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import io.github.vampirestudios.artifice.api.builder.assets.BlockStateBuilder;
+import net.minecraft.block.Block;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.block.enums.StairShape;
 import net.minecraft.util.Identifier;
@@ -43,197 +45,311 @@ public class StairsPiece extends PieceType {
 	}
 
 	public void addBlockstate(ArtificeResourcePack.ClientResourcePackBuilder pack, PieceBlock pb) {
-		pack.addBlockState(Registries.BLOCK.getId(pb.getBlock()), state -> {
-			for (Direction d : Direction.values()) {
-				if (!(d.equals(Direction.DOWN) || d.equals(Direction.UP))) {
-					for (BlockHalf h : BlockHalf.values()) {
-						for (StairShape s : StairShape.values()) {
-							String varname = "facing=" + d.asString() + ",half=" + h.asString() + ",shape=" + s.asString();
-							state.variant(varname, var -> {
-								var.uvlock(true);
-								int y = 0;
-								switch (s) {
-									case STRAIGHT:
-										var.model(getModelPath(pb));
-										switch (d) {
-											case EAST:
-												y = 0;
-												break;
-											case WEST:
-												y = 180;
-												break;
-											case NORTH:
-												y = 270;
-												break;
-											case SOUTH:
-												y = 90;
-												break;
-										}
-										break;
-									case OUTER_RIGHT:
-										var.model(getModelPath(pb, "outer"));
-										switch (h) {
-											case BOTTOM:
-												switch (d) {
-													case EAST:
-														y = 0;
-														break;
-													case WEST:
-														y = 180;
-														break;
-													case NORTH:
-														y = 270;
-														break;
-													case SOUTH:
-														y = 90;
-														break;
-												}
-												break;
-											case TOP:
-												switch (d) {
-													case EAST:
-														y = 90;
-														break;
-													case WEST:
-														y = 270;
-														break;
-													case NORTH:
-														y = 0;
-														break;
-													case SOUTH:
-														y = 180;
-														break;
-												}
-												break;
-										}
-										break;
-									case OUTER_LEFT:
-										var.model(getModelPath(pb, "outer"));
-										switch (h) {
-											case BOTTOM:
-												switch (d) {
-													case EAST:
-														y = 270;
-														break;
-													case WEST:
-														y = 90;
-														break;
-													case NORTH:
-														y = 180;
-														break;
-													case SOUTH:
-														y = 0;
-														break;
-												}
-												break;
-											case TOP:
-												switch (d) {
-													case EAST:
-														y = 0;
-														break;
-													case WEST:
-														y = 180;
-														break;
-													case NORTH:
-														y = 270;
-														break;
-													case SOUTH:
-														y = 90;
-														break;
-												}
-												break;
-										}
-										break;
-									case INNER_RIGHT:
-										var.model(getModelPath(pb, "inner"));
-										switch (h) {
-											case BOTTOM:
-												switch (d) {
-													case EAST:
-														y = 0;
-														break;
-													case WEST:
-														y = 180;
-														break;
-													case SOUTH:
-														y = 90;
-														break;
-													case NORTH:
-														y = 270;
-														break;
-												}
-												break;
-											case TOP:
-												switch (d) {
-													case EAST:
-														y = 90;
-														break;
-													case WEST:
-														y = 270;
-														break;
-													case NORTH:
-														y = 0;
-														break;
-													case SOUTH:
-														y = 180;
-														break;
-												}
-												break;
-										}
-										break;
-									case INNER_LEFT:
-										var.model(getModelPath(pb, "inner"));
-										switch (h) {
-											case BOTTOM:
-												switch (d) {
-													case EAST:
-														y = 270;
-														break;
-													case WEST:
-														y = 90;
-														break;
-													case NORTH:
-														y = 180;
-														break;
-													case SOUTH:
-														y = 0;
-														break;
-												}
-												break;
-											case TOP:
-												switch (d) {
-													case EAST:
-														y = 0;
-														break;
-													case WEST:
-														y = 180;
-														break;
-													case NORTH:
-														y = 270;
-														break;
-													case SOUTH:
-														y = 90;
-														break;
-												}
-												break;
-										}
-										break;
+
+		BlockStateBuilder state = new BlockStateBuilder();
+		for (Direction d : Direction.values()) {
+			if (!(d.equals(Direction.DOWN) || d.equals(Direction.UP))) {
+				for (BlockHalf h : BlockHalf.values()) {
+					for (StairShape s : StairShape.values()) {
+						String varname = "facing=" + d.asString() + ",half=" + h.asString() + ",shape=" + s.asString();
+						BlockStateBuilder.Variant var = new BlockStateBuilder.Variant()
+								.uvlock(true);
+						int y = 0;
+						switch (s) {
+							case STRAIGHT -> {
+								var.model(getModelPath(pb));
+								switch (d) {
+									case EAST -> y = 0;
+									case WEST -> y = 180;
+									case NORTH -> y = 270;
+									case SOUTH -> y = 90;
 								}
-								if (h.equals(BlockHalf.TOP)) var.rotationX(180);
-								var.rotationY(y);
-							});
+							}
+							case OUTER_RIGHT -> {
+								var.model(getModelPath(pb, "outer"));
+								y = switch (h) {
+									case BOTTOM -> switch (d) {
+										case EAST -> 0;
+										case WEST -> 180;
+										case NORTH -> 270;
+										case SOUTH -> 90;
+										default -> y;
+									};
+									case TOP -> switch (d) {
+										case EAST -> 90;
+										case WEST -> 270;
+										case NORTH -> 0;
+										case SOUTH -> 180;
+										default -> y;
+									};
+								};
+							}
+							case OUTER_LEFT -> {
+								var.model(getModelPath(pb, "outer"));
+								y = switch (h) {
+									case BOTTOM -> switch (d) {
+										case EAST -> 270;
+										case WEST -> 90;
+										case NORTH -> 180;
+										case SOUTH -> 0;
+										default -> y;
+									};
+									case TOP -> switch (d) {
+										case EAST -> 0;
+										case WEST -> 180;
+										case NORTH -> 270;
+										case SOUTH -> 90;
+										default -> y;
+									};
+								};
+							}
+							case INNER_RIGHT -> {
+								var.model(getModelPath(pb, "inner"));
+								y = switch (h) {
+									case BOTTOM -> switch (d) {
+										case EAST -> 0;
+										case WEST -> 180;
+										case SOUTH -> 90;
+										case NORTH -> 270;
+										default -> y;
+									};
+									case TOP -> switch (d) {
+										case EAST -> 90;
+										case WEST -> 270;
+										case NORTH -> 0;
+										case SOUTH -> 180;
+										default -> y;
+									};
+								};
+							}
+							case INNER_LEFT -> {
+								var.model(getModelPath(pb, "inner"));
+								y = switch (h) {
+									case BOTTOM -> switch (d) {
+										case EAST -> 270;
+										case WEST -> 90;
+										case NORTH -> 180;
+										case SOUTH -> 0;
+										default -> y;
+									};
+									case TOP -> switch (d) {
+										case EAST -> 0;
+										case WEST -> 180;
+										case NORTH -> 270;
+										case SOUTH -> 90;
+										default -> y;
+									};
+								};
+							}
 						}
+						if (h.equals(BlockHalf.TOP)) var.rotationX(180);
+						var.rotationY(y);
+						state.variant(varname,var);
 					}
 				}
 			}
-			state.variant("facing=east,half=bottom,shape=straight", var -> {
-				var.model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/"));
-			});
-			state.variant("facing=west,half=bottom,shape=straight", var -> {
-				var.model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/"));
-				var.rotationY(180);
-				var.uvlock(true);
-			});
-		});
+		}
+
+		BlockStateBuilder.Variant var2 = new BlockStateBuilder.Variant().model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/"));
+		state.variant("facing=east,half=bottom,shape=straight", var2);
+
+		BlockStateBuilder.Variant var3 = new BlockStateBuilder.Variant()
+				.model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/"))
+				.rotationY(180)
+				.uvlock(true);
+		state.variant("facing=west,half=bottom,shape=straight", var3);
+
+//		pack.addBlockState(Registry.BLOCK.getId(pb.getBlock()), state -> {
+//			for (Direction d : Direction.values()) {
+//				if (!(d.equals(Direction.DOWN) || d.equals(Direction.UP))) {
+//					for (BlockHalf h : BlockHalf.values()) {
+//						for (StairShape s : StairShape.values()) {
+//							String varname = "facing=" + d.asString() + ",half=" + h.asString() + ",shape=" + s.asString();
+//							state.variant(varname, var -> {
+//								var.uvlock(true);
+//								int y = 0;
+//								switch (s) {
+//									case STRAIGHT:
+//										var.model(getModelPath(pb));
+//										switch (d) {
+//											case EAST:
+//												y = 0;
+//												break;
+//											case WEST:
+//												y = 180;
+//												break;
+//											case NORTH:
+//												y = 270;
+//												break;
+//											case SOUTH:
+//												y = 90;
+//												break;
+//										}
+//										break;
+//									case OUTER_RIGHT:
+//										var.model(getModelPath(pb, "outer"));
+//										switch (h) {
+//											case BOTTOM:
+//												switch (d) {
+//													case EAST:
+//														y = 0;
+//														break;
+//													case WEST:
+//														y = 180;
+//														break;
+//													case NORTH:
+//														y = 270;
+//														break;
+//													case SOUTH:
+//														y = 90;
+//														break;
+//												}
+//												break;
+//											case TOP:
+//												switch (d) {
+//													case EAST:
+//														y = 90;
+//														break;
+//													case WEST:
+//														y = 270;
+//														break;
+//													case NORTH:
+//														y = 0;
+//														break;
+//													case SOUTH:
+//														y = 180;
+//														break;
+//												}
+//												break;
+//										}
+//										break;
+//									case OUTER_LEFT:
+//										var.model(getModelPath(pb, "outer"));
+//										switch (h) {
+//											case BOTTOM:
+//												switch (d) {
+//													case EAST:
+//														y = 270;
+//														break;
+//													case WEST:
+//														y = 90;
+//														break;
+//													case NORTH:
+//														y = 180;
+//														break;
+//													case SOUTH:
+//														y = 0;
+//														break;
+//												}
+//												break;
+//											case TOP:
+//												switch (d) {
+//													case EAST:
+//														y = 0;
+//														break;
+//													case WEST:
+//														y = 180;
+//														break;
+//													case NORTH:
+//														y = 270;
+//														break;
+//													case SOUTH:
+//														y = 90;
+//														break;
+//												}
+//												break;
+//										}
+//										break;
+//									case INNER_RIGHT:
+//										var.model(getModelPath(pb, "inner"));
+//										switch (h) {
+//											case BOTTOM:
+//												switch (d) {
+//													case EAST:
+//														y = 0;
+//														break;
+//													case WEST:
+//														y = 180;
+//														break;
+//													case SOUTH:
+//														y = 90;
+//														break;
+//													case NORTH:
+//														y = 270;
+//														break;
+//												}
+//												break;
+//											case TOP:
+//												switch (d) {
+//													case EAST:
+//														y = 90;
+//														break;
+//													case WEST:
+//														y = 270;
+//														break;
+//													case NORTH:
+//														y = 0;
+//														break;
+//													case SOUTH:
+//														y = 180;
+//														break;
+//												}
+//												break;
+//										}
+//										break;
+//									case INNER_LEFT:
+//										var.model(getModelPath(pb, "inner"));
+//										switch (h) {
+//											case BOTTOM:
+//												switch (d) {
+//													case EAST:
+//														y = 270;
+//														break;
+//													case WEST:
+//														y = 90;
+//														break;
+//													case NORTH:
+//														y = 180;
+//														break;
+//													case SOUTH:
+//														y = 0;
+//														break;
+//												}
+//												break;
+//											case TOP:
+//												switch (d) {
+//													case EAST:
+//														y = 0;
+//														break;
+//													case WEST:
+//														y = 180;
+//														break;
+//													case NORTH:
+//														y = 270;
+//														break;
+//													case SOUTH:
+//														y = 90;
+//														break;
+//												}
+//												break;
+//										}
+//										break;
+//								}
+//								if (h.equals(BlockHalf.TOP)) var.rotationX(180);
+//								var.rotationY(y);
+//							});
+//						}
+//					}
+//				}
+//			}
+//			state.variant("facing=east,half=bottom,shape=straight", var -> {
+//				var.model(ExtraPieces.prependToPath(Registry.BLOCK.getId(pb.getBlock()), "block/"));
+//			});
+//			state.variant("facing=west,half=bottom,shape=straight", var -> {
+//				var.model(ExtraPieces.prependToPath(Registry.BLOCK.getId(pb.getBlock()), "block/"));
+//				var.rotationY(180);
+//				var.uvlock(true);
+//			});
+//		});
 	}
 }
