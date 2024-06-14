@@ -2,7 +2,7 @@ package com.shnupbups.extrapieces.api;
 
 import com.shnupbups.extrapieces.core.PieceType;
 import com.shnupbups.extrapieces.core.PieceTypes;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
 
 /**
  * For mods to use to add new piece types and other stuff.
@@ -23,5 +23,5 @@ public interface EPInitializer {
 	 *
 	 * @param data The datapack builder
 	 */
-	void addData(ArtificeResourcePack.ServerResourcePackBuilder data);
+	void addData(RuntimeResourcePack data);
 }

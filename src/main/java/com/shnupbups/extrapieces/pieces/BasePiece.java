@@ -3,7 +3,7 @@ package com.shnupbups.extrapieces.pieces;
 import com.shnupbups.extrapieces.blocks.PieceBlock;
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceType;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
 
 public final class BasePiece extends PieceType {
 	public BasePiece() {
@@ -18,6 +18,6 @@ public final class BasePiece extends PieceType {
 		return (PieceBlock) set.getBase();
 	}
 
-	public void addBlockstate(ArtificeResourcePack.ClientResourcePackBuilder pack, PieceBlock pb) {
+	public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
 	}
 }

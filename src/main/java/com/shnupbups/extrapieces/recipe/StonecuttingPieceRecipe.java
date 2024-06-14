@@ -2,13 +2,14 @@ package com.shnupbups.extrapieces.recipe;
 
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceType;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
-import net.minecraft.item.Item;
+import net.devtech.arrp.api.RuntimeResourcePack;
+import net.devtech.arrp.json.recipe.JIngredient;
+import net.devtech.arrp.json.recipe.JRecipe;
+import net.devtech.arrp.json.recipe.JResult;
 import net.minecraft.item.ItemConvertible;
-
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class StonecuttingPieceRecipe extends PieceRecipe {
 	private PieceIngredient input;
@@ -34,15 +35,15 @@ public class StonecuttingPieceRecipe extends PieceRecipe {
 		return input;
 	}
 
-	public void add(ArtificeResourcePack.ServerResourcePackBuilder data, Identifier id, PieceSet set) {
-		data.addStonecuttingRecipe(id, recipe -> {
-			recipe.result(Registry.BLOCK.getId(getOutput(set)));
-			recipe.group(Registry.BLOCK.getId(getOutput(set)));
-			recipe.count(getCount());
-			PieceIngredient pi = getInput();
-			if(pi.isTag()) recipe.ingredientTag(pi.getId(set));
-			else recipe.ingredientItem(pi.getId(set));
-		});
+	public void add(RuntimeResourcePack data, Identifier id, PieceSet set) {
+		JIngredient ingredient;
+		if(input.isTag()) ingredient = JIngredient.ingredient().tag(input.getId(set).toString());
+		else ingredient = JIngredient.ingredient().item(input.getId(set).toString());
+		data.addRecipe(id,
+				JRecipe.stonecutting(
+						ingredient,
+						JResult.stackedResult(Registries.BLOCK.getId(getOutput(set)).toString(),getCount())
+				).group(Registries.BLOCK.getId(getOutput(set)).toString()));
 	}
 
 	@Override

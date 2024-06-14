@@ -1,14 +1,11 @@
 package com.shnupbups.extrapieces.blocks;
 
-import com.shnupbups.extrapieces.register.ModItemGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-
 import net.minecraft.util.Language;
 
 public class PieceBlockItem extends BlockItem {
@@ -31,8 +28,8 @@ public class PieceBlockItem extends BlockItem {
 		return Text.translatable((getPieceBlock().getType().getTranslationKey()), Text.translatable((getPieceBlock().getSet().getTranslationKey())));
 	}
 
-	@Override
-	protected boolean isIn(ItemGroup group) {
-		return group.equals(ModItemGroups.getItemGroup(this.getPieceBlock().getType())) || group.equals(ItemGroup.SEARCH) || super.isIn(group);
-	}
+//	@Override
+//	protected boolean isIn(ItemGroup group) {
+//		return group.equals(ModItemGroups.getItemGroup(this.getPieceBlock().getType())) || group.equals(ItemGroup.SEARCH) || super.isIn(group);
+//	}
 }

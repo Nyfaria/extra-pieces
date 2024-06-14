@@ -1,5 +1,6 @@
 package com.shnupbups.extrapieces.pieces;
 
+import com.google.gson.JsonObject;
 import com.shnupbups.extrapieces.ExtraPieces;
 import com.shnupbups.extrapieces.blocks.PieceBlock;
 import com.shnupbups.extrapieces.blocks.SlabPieceBlock;
@@ -7,10 +8,17 @@ import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceType;
 import com.shnupbups.extrapieces.core.PieceTypes;
 import com.shnupbups.extrapieces.recipe.ShapedPieceRecipe;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
+import net.devtech.arrp.json.blockstate.JState;
+import net.devtech.arrp.json.blockstate.JVariant;
+import net.devtech.arrp.json.loot.JCondition;
+import net.devtech.arrp.json.loot.JEntry;
+import net.devtech.arrp.json.loot.JFunction;
+import net.devtech.arrp.json.loot.JLootTable;
+import net.devtech.arrp.json.loot.JPool;
 import net.minecraft.block.enums.SlabType;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 
@@ -38,53 +46,52 @@ public class SlabPiece extends PieceType {
 	}
 
 	@Override
-	public void addLootTable(ArtificeResourcePack.ServerResourcePackBuilder data, PieceBlock pb) {
-		data.addLootTable(ExtraPieces.prependToPath(Registry.BLOCK.getId(pb.getBlock()), "blocks/"), loot -> {
-			loot.type(new Identifier("block"));
-			loot.pool(pool -> {
-				pool.rolls(1);
-				pool.entry(entry -> {
-					entry.type(new Identifier("item"));
-					entry.name(Registry.BLOCK.getId(pb.getBlock()));
-					entry.function(new Identifier("set_count"), func -> {
-						func.add("count", 2);
-						func.condition(new Identifier("block_state_property"), cond -> {
-							cond.add("block", Registry.BLOCK.getId(pb.getBlock()).toString());
-							cond.addObject("properties", prop -> {
-								prop.add("type", "double");
-							});
-						});
-					});
-					entry.function(new Identifier("explosion_decay"), cond -> {
-					});
-				});
-			});
-		});
+	public void addLootTable(RuntimeResourcePack data, PieceBlock pb) {
+		JLootTable loot = new JLootTable("block");
+		JPool pool = new JPool();
+		pool.rolls(1);
+		JEntry entry = new JEntry();
+		entry.type("item");
+		entry.name(Registries.BLOCK.getId(pb.getBlock()).toString());
+		JFunction function = new JFunction("set_count");
+		function.parameter("count", 2);
+		JCondition condition = new JCondition("block_state_property");
+		condition.parameter("type", "double");
+		JsonObject properties = new JsonObject();
+		properties.addProperty("type", "bottom");
+		condition.parameter("properties", properties);
+		function.condition(condition);
+		entry.function(function);
+		entry.function(new JFunction("explosion_decay"));
+		pool.entry(entry);
+		loot.pool(pool);
+		data.addLootTable(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "blocks/"), loot);
 	}
 
-	public void addBlockModels(ArtificeResourcePack.ClientResourcePackBuilder pack, PieceBlock pb) {
+	public void addBlockModels(RuntimeResourcePack pack, PieceBlock pb) {
 		super.addBlockModels(pack, pb);
 		addBlockModel(pack, pb, "top");
 		addBlockModel(pack, pb, "double");
 	}
 
-	public void addBlockstate(ArtificeResourcePack.ClientResourcePackBuilder pack, PieceBlock pb) {
-		pack.addBlockState(Registry.BLOCK.getId(pb.getBlock()), state -> {
-			for (SlabType t : SlabType.values()) {
-				state.variant("type=" + t.asString(), var -> {
-					switch (t) {
-						case BOTTOM:
-							var.model(getModelPath(pb));
-							break;
-						case TOP:
-							var.model(getModelPath(pb, "top"));
-							break;
-						case DOUBLE:
-							var.model(getModelPath(pb, "double"));
-							break;
-					}
-				});
+	public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
+		JState state = new JState();
+		for (SlabType t : SlabType.values()) {
+			JVariant var = JState.variant();
+			switch (t) {
+				case BOTTOM:
+					var.put("type=" + t.asString(),JState.model(getModelPath(pb)));
+					break;
+				case TOP:
+					var.put("type=" + t.asString(),JState.model(getModelPath(pb, "top")));
+					break;
+				case DOUBLE:
+					var.put("type=" + t.asString(),JState.model(getModelPath(pb, "double")));
+					break;
 			}
-		});
+			state.add(var);
+		}
+
+		pack.addBlockState(state,Registries.BLOCK.getId(pb.getBlock()));
 	}
 }

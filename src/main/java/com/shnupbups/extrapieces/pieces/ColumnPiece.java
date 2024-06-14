@@ -4,33 +4,37 @@ import com.shnupbups.extrapieces.blocks.ColumnPieceBlock;
 import com.shnupbups.extrapieces.blocks.PieceBlock;
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceType;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
+import net.devtech.arrp.json.blockstate.JBlockModel;
+import net.devtech.arrp.json.blockstate.JState;
+import net.devtech.arrp.json.blockstate.JVariant;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 
 public class ColumnPiece extends PieceType {
-	public ColumnPiece() {
-		super("column");
-	}
+    public ColumnPiece() {
+        super("column");
+    }
 
-	public ColumnPieceBlock getNew(PieceSet set) {
-		return new ColumnPieceBlock(set);
-	}
+    public ColumnPieceBlock getNew(PieceSet set) {
+        return new ColumnPieceBlock(set);
+    }
 
-	public void addBlockstate(ArtificeResourcePack.ClientResourcePackBuilder pack, PieceBlock pb) {
-		pack.addBlockState(Registry.BLOCK.getId(pb.getBlock()), state -> {
-			for (Direction.Axis a : Direction.Axis.values()) {
-				state.variant("axis=" + a.asString(), var -> {
-					var.uvlock(true);
-					var.model(getModelPath(pb));
-					if (a != Direction.Axis.Y) {
-						var.rotationX(90);
-						if (a == Direction.Axis.X) {
-							var.rotationY(90);
-						}
-					}
-				});
-			}
-		});
-	}
+    public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
+        JState state = new JState();
+        for (Direction.Axis a : Direction.Axis.values()) {
+            JVariant var = JState.variant();
+            JBlockModel model = JState.model(getModelPath(pb)).uvlock();
+            if (a != Direction.Axis.Y) {
+                model.x(90);
+                if (a == Direction.Axis.X) {
+                    model.y(90);
+                }
+            }
+            var.put("axis=" + a.asString(), model);
+
+            state.add(var);
+        }
+        pack.addBlockState(state,Registries.BLOCK.getId(pb.getBlock()));
+    }
 }

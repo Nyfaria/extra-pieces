@@ -3,13 +3,13 @@ package com.shnupbups.extrapieces.register;
 import com.shnupbups.extrapieces.ExtraPieces;
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceSets;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
 
 public class ModLootTables {
 
 	static int l;
 
-	public static void init(ArtificeResourcePack.ServerResourcePackBuilder data) {
+	public static void init(RuntimeResourcePack data) {
 		for (PieceSet ps : PieceSets.registry.values()) {
 			ps.addLootTables(data);
 		}

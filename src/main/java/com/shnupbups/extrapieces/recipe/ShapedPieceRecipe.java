@@ -5,13 +5,16 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceType;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
-import net.minecraft.item.Item;
+import net.devtech.arrp.api.RuntimeResourcePack;
+import net.devtech.arrp.json.recipe.JIngredient;
+import net.devtech.arrp.json.recipe.JKeys;
+import net.devtech.arrp.json.recipe.JPattern;
+import net.devtech.arrp.json.recipe.JRecipe;
+import net.devtech.arrp.json.recipe.JResult;
 import net.minecraft.item.ItemConvertible;
-
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Collection;
 import java.util.List;
@@ -55,20 +58,21 @@ public class ShapedPieceRecipe extends PieceRecipe {
 		return key.get(c);
 	}
 
-	public void add(ArtificeResourcePack.ServerResourcePackBuilder data, Identifier id, PieceSet set) {
-		data.addShapedRecipe(id, recipe -> {
-			recipe.result(Registry.BLOCK.getId(this.getOutput(set)), this.getCount());
-			recipe.group(Registry.BLOCK.getId(getOutput(set)));
-			recipe.pattern(this.getPattern());
-			for (Map.Entry<Character, Collection<PieceIngredient>> ingredients : this.getKey().asMap().entrySet()) {
-				recipe.multiIngredient(ingredients.getKey(), ingredient -> {
-					for (PieceIngredient pi : ingredients.getValue()) {
-						if (pi.isTag()) ingredient.tag(pi.getId(set));
-						else ingredient.item(pi.getId(set));
-					}
-				});
+	public void add(RuntimeResourcePack data, Identifier id, PieceSet set) {
+		JKeys keys = JKeys.keys();
+		for (Map.Entry<Character, Collection<PieceIngredient>> ingredients : this.getKey().asMap().entrySet()) {
+			for (PieceIngredient pi : ingredients.getValue()) {
+				if (pi.isTag())
+					keys.key(ingredients.getKey().toString(), JIngredient.ingredient().tag(pi.getId(set).toString()));
+				else
+					keys.key(ingredients.getKey().toString(), JIngredient.ingredient().item(pi.getId(set).toString()));
 			}
-		});
+		}
+		data.addRecipe(id, JRecipe.shaped(
+				JPattern.pattern(this.getPattern()),
+				keys,
+				JResult.stackedResult(Registries.BLOCK.getId(this.getOutput(set)).toString(), this.getCount())
+		).group(Registries.BLOCK.getId(getOutput(set)).toString()));
 	}
 
 	@Override

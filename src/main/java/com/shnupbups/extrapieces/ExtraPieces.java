@@ -7,13 +7,14 @@ import com.shnupbups.extrapieces.core.PieceTypes;
 import com.shnupbups.extrapieces.debug.DebugItem;
 import com.shnupbups.extrapieces.register.ModBlocks;
 import com.shnupbups.extrapieces.register.ModConfigs;
-import io.github.vampirestudios.artifice.api.Artifice;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RRPCallback;
+import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,11 +22,12 @@ import java.io.File;
 
 public class ExtraPieces implements ModInitializer {
 	public static final String mod_id = "extrapieces";
+	public static final RuntimeResourcePack PACK = RuntimeResourcePack.create(mod_id+":pack");
 	public static final String mod_name = "Extra Pieces";
 	public static final String piece_pack_version = "2.9.0";
 	public static final Logger logger = LogManager.getFormatterLogger(mod_name);
 
-	public static ArtificeResourcePack datapack;
+//	public static ArtificeResourcePack datapack;
 
 	public static File configDir;
 	public static File ppDir;
@@ -75,13 +77,13 @@ public class ExtraPieces implements ModInitializer {
 	}
 
 	public static void dump() {
-		if (ModConfigs.dumpData) {
-			try {
-				datapack.dumpResources(FabricLoader.getInstance().getConfigDirectory().getParent() + "/dump");
-			} catch (Exception e) {
-				ExtraPieces.debugLog("BIG OOF: " + e.getMessage());
-			}
-		}
+//		if (ModConfigs.dumpData) {
+//			try {
+//				datapack..dumpResources(FabricLoader.getInstance().getConfigDirectory().getParent() + "/dump","dump");
+//			} catch (Exception e) {
+//				ExtraPieces.debugLog("BIG OOF: " + e.getMessage());
+//			}
+//		}
 	}
 
 	@Override
@@ -93,8 +95,11 @@ public class ExtraPieces implements ModInitializer {
 			api.onInitialize();
 		});
 		ModConfigs.initPiecePacks();
-		datapack = Artifice.registerData(getID("ep_data"), ArtificeResourcePack.ofData(ModBlocks::init));
-		Registry.register(Registry.ITEM, getID("debug_item"), new DebugItem());
+		ModBlocks.init(PACK);
+
+//		datapack = Artifice.registerData(getID("ep_data"), new ArtificeResourcePackImpl(ResourceType.SERVER_DATA,null, blah->ModBlocks.init((RuntimeResourcePack) blah)){});
+		RRPCallback.EVENT.register(a-> a.add(PACK));
+		Registry.register(Registries.ITEM, getID("debug_item"), new DebugItem());
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			if (ModBlocks.setBuilders.size() != PieceSets.registry.size()) {

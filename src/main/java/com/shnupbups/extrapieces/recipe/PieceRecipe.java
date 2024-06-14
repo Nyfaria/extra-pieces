@@ -2,7 +2,7 @@ package com.shnupbups.extrapieces.recipe;
 
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceType;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
 import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
 
@@ -31,7 +31,7 @@ public abstract class PieceRecipe {
 		return set.getPiece(getOutput());
 	}
 
-	public abstract void add(ArtificeResourcePack.ServerResourcePackBuilder data, Identifier id, PieceSet set);
+	public abstract void add(RuntimeResourcePack data, Identifier id, PieceSet set);
 
 	public abstract boolean canAddForSet(PieceSet set);
 }

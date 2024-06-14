@@ -4,11 +4,11 @@ import com.shnupbups.extrapieces.ExtraPieces;
 import com.shnupbups.extrapieces.blocks.PieceBlock;
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceSets;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
 
 public class ModModels {
 
-	public static void init(ArtificeResourcePack.ClientResourcePackBuilder pack) {
+	public static void init(RuntimeResourcePack pack) {
 		int m = 0;
 		for (PieceSet set : PieceSets.registry.values()) {
 			for (PieceBlock pb : set.getPieceBlocks()) {

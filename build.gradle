@@ -12,6 +12,12 @@ group = project.maven_group
 
 repositories {
 	mavenCentral()
+	mavenLocal()
+	maven {
+		url = uri("https://ueaj.dev/maven")
+		// for 0.4.2 and older
+		// url uri("https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/")
+	}
 }
 
 dependencies {
@@ -19,13 +25,13 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
+	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.3.6")))
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Artifice
-	modImplementation "io.github.vampirestudios:artifice:${project.artifice_version}"
-	include "io.github.vampirestudios:artifice:${project.artifice_version}"
+//	modImplementation "io.github.vampirestudios:AstralArtifice:${project.artifice_version}"
+//	include "io.github.vampirestudios:AstralArtifice:${project.artifice_version}"
 
 	// Jankson
 	//modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
@@ -33,6 +39,7 @@ dependencies {
 	
 	modImplementation "blue.endless:jankson:${project.jankson_version}"
 	include "blue.endless:jankson:${project.jankson_version}"
+	modImplementation("net.devtech:arrp:0.8.+")
 }
 
 processResources {

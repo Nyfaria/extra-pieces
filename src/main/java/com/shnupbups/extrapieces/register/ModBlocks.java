@@ -5,16 +5,20 @@ import com.shnupbups.extrapieces.api.EPInitializer;
 import com.shnupbups.extrapieces.core.PieceSet;
 import com.shnupbups.extrapieces.core.PieceSets;
 import com.shnupbups.extrapieces.core.PieceTypes;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
+import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.function.BiConsumer;
 
 @SuppressWarnings("WeakerAccess")
@@ -416,8 +420,8 @@ public class ModBlocks {
 		}
 	}
 
-	public static void init(ArtificeResourcePack.ServerResourcePackBuilder data) {
-		visitRegistry(Registry.BLOCK, (id, block) -> {
+	public static void init(RuntimeResourcePack data) {
+		visitRegistry(Registries.BLOCK, (id, block) -> {
 			if (!finished) {
 				Iterator<PieceSet.Builder> primed = primedBuilders.iterator();
 				PieceSet.Builder builder;
@@ -451,7 +455,7 @@ public class ModBlocks {
 				}
 			}
 		});
-		visitRegistry(Registry.ITEM, (id, item) -> {
+		visitRegistry(Registries.ITEM, (id, item) -> {
 			if (!finished) {
 				Iterator<PieceSet.Builder> primed = primedBuilders.iterator();
 				PieceSet.Builder builder;
@@ -474,7 +478,7 @@ public class ModBlocks {
 		});
 	}
 
-	public static void finish(ArtificeResourcePack.ServerResourcePackBuilder data) {
+	public static void finish(RuntimeResourcePack data) {
 		ModRecipes.init(data);
 		ModLootTables.init(data);
 		ModTags.init(data);

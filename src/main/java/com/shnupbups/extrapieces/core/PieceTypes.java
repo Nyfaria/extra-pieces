@@ -1,7 +1,17 @@
 package com.shnupbups.extrapieces.core;
 
 import com.shnupbups.extrapieces.blocks.PieceBlock;
-import com.shnupbups.extrapieces.pieces.*;
+import com.shnupbups.extrapieces.pieces.BasePiece;
+import com.shnupbups.extrapieces.pieces.ColumnPiece;
+import com.shnupbups.extrapieces.pieces.CornerPiece;
+import com.shnupbups.extrapieces.pieces.FenceGatePiece;
+import com.shnupbups.extrapieces.pieces.FencePiece;
+import com.shnupbups.extrapieces.pieces.LayerPiece;
+import com.shnupbups.extrapieces.pieces.PostPiece;
+import com.shnupbups.extrapieces.pieces.SidingPiece;
+import com.shnupbups.extrapieces.pieces.SlabPiece;
+import com.shnupbups.extrapieces.pieces.StairsPiece;
+import com.shnupbups.extrapieces.pieces.WallPiece;
 import com.shnupbups.extrapieces.register.ModConfigs;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;

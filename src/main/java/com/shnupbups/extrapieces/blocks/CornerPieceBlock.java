@@ -7,7 +7,11 @@ import com.shnupbups.extrapieces.core.PieceTypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,11 +32,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.TickPriority;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.tick.OrderedTick;
+import net.minecraft.world.tick.TickPriority;
 
 import java.util.Random;
 
@@ -184,7 +188,7 @@ public class CornerPieceBlock extends Block implements Waterloggable, PieceBlock
 		FluidState fluidState_1 = itemPlacementContext_1.getWorld().getFluidState(blockPos_1);
 		double xPos = itemPlacementContext_1.getHitPos().getX() - blockPos_1.getX();
 		double zPos = itemPlacementContext_1.getHitPos().getZ() - blockPos_1.getZ();
-		Direction direction_1 = itemPlacementContext_1.getPlayerFacing().getOpposite();
+		Direction direction_1 = itemPlacementContext_1.getPlayerLookDirection().getOpposite();
 		if (direction_1 == Direction.EAST) {
 			if (zPos < 0.5) direction_1 = direction_1.rotateYClockwise();
 		} else if (direction_1 == Direction.WEST) {

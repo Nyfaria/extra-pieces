@@ -4,7 +4,6 @@ import blue.endless.jankson.JsonArray;
 import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.JsonPrimitive;
-import com.google.gson.annotations.JsonAdapter;
 import com.shnupbups.extrapieces.ExtraPieces;
 import com.shnupbups.extrapieces.blocks.FakePieceBlock;
 import com.shnupbups.extrapieces.blocks.PieceBlock;
@@ -15,21 +14,29 @@ import com.shnupbups.extrapieces.register.ModConfigs;
 import com.shnupbups.extrapieces.register.ModItemGroups;
 import com.shnupbups.extrapieces.register.ModLootTables;
 import com.shnupbups.extrapieces.register.ModRecipes;
-import io.github.vampirestudios.artifice.api.ArtificeResourcePack;
-
+import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
+import net.minecraft.block.MapColor;
 import net.minecraft.client.render.RenderLayers;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
-import net.minecraft.util.registry.Registry;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 public class PieceSet {
 	public static final HashSet<PieceType> NO_SLAB;
@@ -92,7 +99,7 @@ public class PieceSet {
 		this.base = base;
 		this.originalName = name.toLowerCase();
 		this.name = PieceSets.getNewSetName(originalName);
-		Identifier id = Registry.BLOCK.getId(base);
+		Identifier id = Registries.BLOCK.getId(base);
 		this.mainTexture = new Identifier(id.getNamespace(), "block/" + id.getPath());
 		this.topTexture = mainTexture;
 		this.bottomTexture = topTexture;
@@ -175,7 +182,7 @@ public class PieceSet {
 	}
 
 	public boolean hasMainTexture() {
-		Identifier id = Registry.BLOCK.getId(base);
+		Identifier id = Registries.BLOCK.getId(base);
 		Identifier def = new Identifier(id.getNamespace(), "block/" + id.getPath());
 		return !getMainTexture().equals(def);
 	}
@@ -242,7 +249,7 @@ public class PieceSet {
 	}
 
 	public boolean isNormallyStonecuttable() {
-		return (base.getDefaultState().getMaterial().equals(Material.STONE) || base.getDefaultState().getMaterial().equals(Material.METAL));
+		return (base.getDefaultState().getMapColor(null,null) == MapColor.STONE_GRAY || base.getDefaultState().getMapColor(null,null) == MapColor.IRON_GRAY);
 	}
 
 	public boolean isWoodmillable() {
@@ -254,7 +261,7 @@ public class PieceSet {
 	}
 
 	public boolean isNormallyWoodmillable() {
-		return base.getDefaultState().getMaterial().equals(Material.WOOD);
+		return base.getDefaultState().isBurnable();
 	}
 
 	public boolean isCraftable(PieceType type) {
@@ -280,14 +287,8 @@ public class PieceSet {
 		return this;
 	}
 
-	/**
-	 * Registers each {@link PieceType} in this {@link PieceSet} to the {@link Registry}.<br>
-	 * If {@link #isGenerated()} returns {@code false}, runs {@link #generate()}.
-	 *
-	 * @return This {@link PieceSet}
-	 * @throws IllegalStateException If a {@link PieceSet} has already been registered with the same base {@link Block}
-	 */
-	public PieceSet register(ArtificeResourcePack.ServerResourcePackBuilder data) {
+
+	public PieceSet register(RuntimeResourcePack data) {
 		if (isRegistered())
 			return this;
 		if (!isGenerated()) generate();
@@ -296,13 +297,13 @@ public class PieceSet {
 
 			Identifier id = new Identifier(type.getId().getNamespace(), type.getBlockId(getName()));
 
-			Registry.register(Registry.BLOCK, id, block.getBlock());
+			Registry.register(Registries.BLOCK, id, block.getBlock());
 
 			if (this.getBase() != Blocks.AIR) ModItemGroups.getItemGroup(block);
 
 			BlockItem item = type.getBlockItem(block);
 			item.appendBlocks(Item.BLOCK_ITEMS, item);
-			Registry.register(Registry.ITEM, id, item);
+			Registry.register(Registries.ITEM, id, item);
 		}
 		registered = true;
 		//System.out.println("DEBUG! PieceSet register: "+this.toString());
@@ -439,7 +440,7 @@ public class PieceSet {
 	}
 	public JsonObject toJson() {
 		JsonObject ob = new JsonObject();
-		ob.put("base", new JsonPrimitive(Registry.BLOCK.getId(this.getBase())));
+		ob.put("base", new JsonPrimitive(Registries.BLOCK.getId(this.getBase())));
 		if (this.isStonecuttable() != this.isNormallyStonecuttable()) {
 			ob.put("stonecuttable", new JsonPrimitive(this.isStonecuttable()));
 		}
@@ -465,7 +466,7 @@ public class PieceSet {
 		if (!this.getVanillaTypes().isEmpty()) {
 			JsonObject vp = new JsonObject();
 			for (PieceType p : this.getVanillaTypes()) {
-				vp.put(p.toString(), new JsonPrimitive(Registry.BLOCK.getId(this.getPiece(p))));
+				vp.put(p.toString(), new JsonPrimitive(Registries.BLOCK.getId(this.getPiece(p))));
 			}
 			ob.put("vanilla_pieces", vp);
 		}
@@ -500,7 +501,7 @@ public class PieceSet {
 
 //	public JsonObject toJson() {
 //		JsonObject ob = new JsonObject();
-//		Identifier id = Registry.BLOCK.getId(this.getBase());
+//		Identifier id = Registries.BLOCK.getId(this.getBase());
 //		ob.put("base", new JsonPrimitive(id.getPath()));
 //		if (this.isStonecuttable() != this.isNormallyStonecuttable()) {
 //			ob.put("stonecuttable", new JsonPrimitive(this.isStonecuttable()));
@@ -530,7 +531,7 @@ public class PieceSet {
 ////			Iterator<PieceType> it = this.getVanillaTypes().iterator();
 ////			while (it.hasNext()) {
 ////				PieceType p = it.next();
-////				Identifier pi = Registry.BLOCK.getId(this.getPiece(p));
+////				Identifier pi = Registries.BLOCK.getId(this.getPiece(p));
 ////				vp.put(p.toString(), new JsonPrimitive(pi.toString()));
 ////			}
 ////			ob.put("vanilla_pieces", vp);
@@ -540,7 +541,7 @@ public class PieceSet {
 //		if (!this.getVanillaTypes().isEmpty()) {
 //			JsonObject vp = new JsonObject();
 //			for (PieceType p : this.getVanillaTypes()) {
-//				Identifier pv =  Registry.BLOCK.getId(this.getPiece(p));
+//				Identifier pv =  Registries.BLOCK.getId(this.getPiece(p));
 //				vp.put(p.toString(), new JsonPrimitive(pv.getPath()));
 //			}
 //			ob.put("vanilla_pieces", vp);
@@ -552,7 +553,7 @@ public class PieceSet {
 ////			Iterator<PieceType> it = this.getUncraftableTypes().iterator();
 ////			while (it.hasNext()) {
 ////				PieceType p = it.next();
-////				Identifier pi = Registry.BLOCK.getId(this.getPiece(p));
+////				Identifier pi = Registries.BLOCK.getId(this.getPiece(p));
 ////				uc.add(new JsonPrimitive(pi.toString()));
 ////			}
 ////			ob.put("uncraftable", uc);
@@ -562,7 +563,7 @@ public class PieceSet {
 //		if (!this.getUncraftableTypes().isEmpty()) {
 //			JsonArray uc = new JsonArray();
 //			for (PieceType p : this.getUncraftableTypes()) {
-//				Identifier pu = Registry.BLOCK.getId(this.getPiece(p));
+//				Identifier pu = Registries.BLOCK.getId(this.getPiece(p));
 //				uc.add(new JsonPrimitive(pu.getPath()));
 //			}
 //			ob.put("uncraftable", uc);
@@ -574,7 +575,7 @@ public class PieceSet {
 ////			Iterator<PieceType> it = this.getExcludedTypes().iterator();
 ////			while (it.hasNext()) {
 ////				PieceType p = it.next();
-////				Identifier pi = Registry.BLOCK.getId(this.getPiece(p));
+////				Identifier pi = Registries.BLOCK.getId(this.getPiece(p));
 ////				if (!this.isVanillaPiece(p)) {
 ////					ex.add(new JsonPrimitive(pi.toString()));
 ////				}
@@ -585,7 +586,7 @@ public class PieceSet {
 //		if (!this.getExcludedTypes().isEmpty() && !includeMode) {
 //			JsonArray ex = new JsonArray();
 //			for (PieceType p : this.getExcludedTypes()) {
-//				Identifier pe = Registry.BLOCK.getId(this.getPiece(p));
+//				Identifier pe = Registries.BLOCK.getId(this.getPiece(p));
 //				if (!this.isVanillaPiece(p)) {
 //					ex.add(new JsonPrimitive(pe.getPath()));
 //				}
@@ -598,7 +599,7 @@ public class PieceSet {
 ////			Iterator<PieceType> it = this.getGenTypes().iterator();
 ////			while (it.hasNext()) {
 ////				PieceType p = it.next();
-////				Identifier pi = Registry.BLOCK.getId(this.getPiece(p));
+////				Identifier pi = Registries.BLOCK.getId(this.getPiece(p));
 ////				in.add(new JsonPrimitive(pi.toString()));
 ////			}
 ////			ob.put("include", in);
@@ -609,7 +610,7 @@ public class PieceSet {
 //		if (includeMode) {
 //			JsonArray in = new JsonArray();
 //			for (PieceType p : this.getGenTypes()) {
-//				Identifier pi = Registry.BLOCK.getId(this.getPiece(p));
+//				Identifier pi = Registries.BLOCK.getId(this.getPiece(p));
 //				in.add(new JsonPrimitive(pi.getPath()));
 //			}
 //			ob.put("include", in);
@@ -617,13 +618,13 @@ public class PieceSet {
 //		return ob;
 //	}
 
-	public void addRecipes(ArtificeResourcePack.ServerResourcePackBuilder data) {
+	public void addRecipes(RuntimeResourcePack data) {
 		for (PieceBlock pb : this.getPieceBlocks()) {
 			if (isCraftable(pb.getType())) {
 				int i = 0;
 				for (PieceRecipe pr : pb.getType().getCraftingRecipes()) {
 					if (pr.canAddForSet(this)) {
-						Identifier bid = Registry.BLOCK.getId(pb.getBlock());
+						Identifier bid = Registries.BLOCK.getId(pb.getBlock());
 						if(!ModRecipes.checkIsAir(bid, this)) {
 							Identifier id = ExtraPieces.getID(bid.getPath() + "_" + (i++));
 							pr.add(data, id, this);
@@ -634,7 +635,7 @@ public class PieceSet {
 
 			}
 			if (!isVanillaPiece(pb.getType()) && pb.getType() != PieceTypes.BASE && (isStonecuttable() || ModConfigs.everythingStonecuttable)) {
-				Identifier bid = Registry.BLOCK.getId(pb.getBlock());
+				Identifier bid = Registries.BLOCK.getId(pb.getBlock());
 				if(!ModRecipes.checkIsAir(bid, this)) {
 					Identifier id = ExtraPieces.getID(bid.getPath() + "_stonecutting");
 					StonecuttingPieceRecipe r = pb.getType().getStonecuttingRecipe();
@@ -645,7 +646,7 @@ public class PieceSet {
 				}
 			}
 			if (ExtraPieces.isWoodmillInstalled() && !isVanillaPiece(pb.getType()) && pb.getType() != PieceTypes.BASE && isWoodmillable()) {
-				Identifier bid = Registry.BLOCK.getId(pb.getBlock());
+				Identifier bid = Registries.BLOCK.getId(pb.getBlock());
 				if(!ModRecipes.checkIsAir(bid, this)) {
 					Identifier id = ExtraPieces.getID(bid.getPath() + "_woodmilling");
 					WoodmillingPieceRecipe r = pb.getType().getWoodmillingRecipe();
@@ -659,7 +660,7 @@ public class PieceSet {
 		ModRecipes.addMiscRecipes(data, this);
 	}
 
-	public void addLootTables(ArtificeResourcePack.ServerResourcePackBuilder data) {
+	public void addLootTables(RuntimeResourcePack data) {
 		for (PieceBlock pb : this.getPieceBlocks()) {
 			if (!isVanillaPiece(pb.getType())) {
 				pb.getType().addLootTable(data, pb);
@@ -768,10 +769,10 @@ public class PieceSet {
 		public PieceSet build() {
 			if(shouldLoad()) {
 				if (built) {
-					return PieceSets.getSet(Registry.BLOCK.get(base));
+					return PieceSets.getSet(Registries.BLOCK.get(base));
 				}
 				
-				PieceSet ps = new PieceSet(Registry.BLOCK.get(base), name, genTypes);
+				PieceSet ps = new PieceSet(Registries.BLOCK.get(base), name, genTypes);
 				if (this.stonecuttable != null) ps.setStonecuttable(this.stonecuttable);
 				if (this.woodmillable != null) ps.setWoodmillable(this.woodmillable);
 				if (this.opaque != null) ps.setOpaque(this.opaque);
@@ -780,7 +781,7 @@ public class PieceSet {
 				if (this.bottomTexture != null) ps.setBottomTexture(this.bottomTexture);
 				
 				for (Map.Entry<PieceType, Identifier> vanillaPiece : this.getVanillaPieces().entrySet()) {
-					ps.addVanillaPiece(vanillaPiece.getKey(), Registry.BLOCK.get(vanillaPiece.getValue()));
+					ps.addVanillaPiece(vanillaPiece.getKey(), Registries.BLOCK.get(vanillaPiece.getValue()));
 				}
 				
 				if (this.includeMode) ps.setInclude();
@@ -829,12 +830,12 @@ public class PieceSet {
 		}
 
 		public boolean isReady() {
-			if (Registry.BLOCK.getOrEmpty(base).isEmpty() || Registry.ITEM.getOrEmpty(base).isEmpty()) {
+			if (Registries.BLOCK.getOrEmpty(base).isEmpty() || Registries.ITEM.getOrEmpty(base).isEmpty()) {
 				return false;
 			}
 
 			for (Identifier id : getVanillaPieces().values()) {
-				if (Registry.BLOCK.getOrEmpty(id).isEmpty() || Registry.ITEM.getOrEmpty(id).isEmpty()) {
+				if (Registries.BLOCK.getOrEmpty(id).isEmpty() || Registries.ITEM.getOrEmpty(id).isEmpty()) {
 					return false;
 				}
 			}
