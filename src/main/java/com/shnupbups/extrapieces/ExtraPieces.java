@@ -98,7 +98,7 @@ public class ExtraPieces implements ModInitializer {
 		ModBlocks.init(PACK);
 
 //		datapack = Artifice.registerData(getID("ep_data"), new ArtificeResourcePackImpl(ResourceType.SERVER_DATA,null, blah->ModBlocks.init((RuntimeResourcePack) blah)){});
-		RRPCallback.EVENT.register(a-> a.add(PACK));
+		RRPCallback.BETWEEN_VANILLA_AND_MODS.register(a-> a.add(PACK));
 		Registry.register(Registries.ITEM, getID("debug_item"), new DebugItem());
 
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {

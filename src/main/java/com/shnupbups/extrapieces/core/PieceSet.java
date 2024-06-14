@@ -440,7 +440,7 @@ public class PieceSet {
 	}
 	public JsonObject toJson() {
 		JsonObject ob = new JsonObject();
-		ob.put("base", new JsonPrimitive(Registries.BLOCK.getId(this.getBase())));
+		ob.put("base", new JsonPrimitive(Registries.BLOCK.getId(this.getBase()).toString()));
 		if (this.isStonecuttable() != this.isNormallyStonecuttable()) {
 			ob.put("stonecuttable", new JsonPrimitive(this.isStonecuttable()));
 		}
@@ -453,27 +453,27 @@ public class PieceSet {
 		if (this.hasCustomTexture()) {
 			JsonObject tx = new JsonObject();
 			if (hasMainTexture()) {
-				tx.put("main", new JsonPrimitive(this.getMainTexture()));
+				tx.put("main", new JsonPrimitive(this.getMainTexture().toString()));
 			}
 			if (hasTopTexture()) {
-				tx.put("top", new JsonPrimitive(this.getTopTexture()));
+				tx.put("top", new JsonPrimitive(this.getTopTexture().toString()));
 			}
 			if (hasBottomTexture()) {
-				tx.put("bottom", new JsonPrimitive(this.getBottomTexture()));
+				tx.put("bottom", new JsonPrimitive(this.getBottomTexture().toString()));
 			}
 			ob.put("textures", tx);
 		}
 		if (!this.getVanillaTypes().isEmpty()) {
 			JsonObject vp = new JsonObject();
 			for (PieceType p : this.getVanillaTypes()) {
-				vp.put(p.toString(), new JsonPrimitive(Registries.BLOCK.getId(this.getPiece(p))));
+				vp.put(p.toString(), new JsonPrimitive(Registries.BLOCK.getId(this.getPiece(p)).toString()));
 			}
 			ob.put("vanilla_pieces", vp);
 		}
 		if (!this.getUncraftableTypes().isEmpty()) {
 			JsonArray uc = new JsonArray();
 			for (PieceType p : this.getUncraftableTypes()) {
-				uc.add(new JsonPrimitive(p));
+				uc.add(new JsonPrimitive(p.toString()));
 			}
 			ob.put("uncraftable", uc);
 		}
@@ -481,7 +481,7 @@ public class PieceSet {
 			JsonArray ex = new JsonArray();
 			for (PieceType p : this.getExcludedTypes()) {
 				if (!this.isVanillaPiece(p)) {
-					ex.add(new JsonPrimitive(p));
+					ex.add(new JsonPrimitive(p.toString()));
 				}
 			}
 			if (!ex.isEmpty()) ob.put("exclude", ex);
@@ -489,7 +489,7 @@ public class PieceSet {
 		if (includeMode) {
 			JsonArray in = new JsonArray();
 			for (PieceType p : this.getGenTypes()) {
-				in.add(new JsonPrimitive(p));
+				in.add(new JsonPrimitive(p.toString()));
 			}
 			ob.put("include", in);
 		}
