@@ -31,10 +31,10 @@ import net.minecraft.util.math.Direction;
 import java.nio.file.Path;
 
 public class RRPPreTest {
-	public static void main(String[] args) {
+	public static void main() {
 		RuntimeResourcePack pack = RuntimeResourcePack.create("test:test");
 		pack.addLang(new Identifier("aaaa:aaaa"), new JLang().entry("aaaa", "bbbbb"));
-		pack.dumpDirect(Path.of("aaaa"));
+		pack.dumpDirect(Path.of("C:/Users/kinar/Desktop/aaa"));
 
 		JState iron_block = state(variant(JState.model("block/iron_block")));
 		JState oak_fence = state(multipart(JState.model("block/oak_fence_post")),
@@ -68,8 +68,8 @@ public class RRPPreTest {
 		System.out.println(RuntimeResourcePackImpl.GSON.toJson(loot("minecraft:block").pool(pool().rolls(1)
                                                                                                   .entry(entry().type("minecraft:item").name("minecraft:diamond"))
                                                                                                   .condition(condition("minecraft:survives_explosion")))));
-		//System.out.println(gson.toJson(iron_block));
-		//System.out.println(gson.toJson(oak_fence));
+		System.out.println(gson.toJson(iron_block));
+		System.out.println(gson.toJson(oak_fence));
 		System.out.println(gson.toJson(model));
 
 		System.out.println(gson.toJson(lang));

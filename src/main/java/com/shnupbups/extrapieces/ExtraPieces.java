@@ -7,11 +7,16 @@ import com.shnupbups.extrapieces.core.PieceTypes;
 import com.shnupbups.extrapieces.debug.DebugItem;
 import com.shnupbups.extrapieces.register.ModBlocks;
 import com.shnupbups.extrapieces.register.ModConfigs;
+import com.shnupbups.extrapieces.register.ModLootTables;
+import com.shnupbups.extrapieces.register.ModModels;
+import com.shnupbups.extrapieces.register.ModTags;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -19,6 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public class ExtraPieces implements ModInitializer {
 	public static final String mod_id = "extrapieces";
@@ -88,19 +94,27 @@ public class ExtraPieces implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+//		RRPPreTest.main();
 		ModConfigs.init();
 		PieceTypes.init();
 		FabricLoader.getInstance().getEntrypoints("extrapieces", EPInitializer.class).forEach(api -> {
 			debugLog("EPInitializer " + api.toString());
 			api.onInitialize();
 		});
+		Block block = new Block(AbstractBlock.Settings.create());
+		Registry.register(Registries.BLOCK, getID("test_block"), block);
+
+
 		ModConfigs.initPiecePacks();
 		ModBlocks.init(PACK);
 
+		ModModels.init(ExtraPieces.PACK);
+//		ModBlocks.finish(PACK);
 //		datapack = Artifice.registerData(getID("ep_data"), new ArtificeResourcePackImpl(ResourceType.SERVER_DATA,null, blah->ModBlocks.init((RuntimeResourcePack) blah)){});
-		RRPCallback.BETWEEN_VANILLA_AND_MODS.register(a-> a.add(PACK));
-		Registry.register(Registries.ITEM, getID("debug_item"), new DebugItem());
+		RRPCallback.BEFORE_USER.register(a-> a.add(PACK));
 
+		Registry.register(Registries.ITEM, getID("debug_item"), new DebugItem());
+		PACK.dumpDirect(Path.of("C:/Users/kinar/Desktop/ExtraPieces"));
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			if (ModBlocks.setBuilders.size() != PieceSets.registry.size()) {
 				for (PieceSet.Builder psb : ModBlocks.setBuilders.values()) {

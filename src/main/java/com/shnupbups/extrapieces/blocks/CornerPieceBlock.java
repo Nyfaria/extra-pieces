@@ -38,7 +38,7 @@ import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.tick.OrderedTick;
 import net.minecraft.world.tick.TickPriority;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 @SuppressWarnings("deprecation")
 public class CornerPieceBlock extends Block implements Waterloggable, PieceBlock {

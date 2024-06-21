@@ -24,7 +24,7 @@ public class ModItemGroups {
 	}
 
 	public static ItemGroup getItemGroup(PieceBlock pb) {
-		return getItemGroup(pb.getType(), pb.getBlock());
+		return getItemGroup(pb.getType(), (Block) pb);
 	}
 
 	public static boolean hasItemGroup(PieceType type) {

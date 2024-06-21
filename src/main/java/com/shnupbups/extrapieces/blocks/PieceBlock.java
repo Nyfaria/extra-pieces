@@ -9,9 +9,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-import java.util.Random;
 
 public interface PieceBlock extends ItemConvertible {
 	PieceType getType();
@@ -32,7 +32,6 @@ public interface PieceBlock extends ItemConvertible {
 		return getSet().getName()+" "+getType().getId();
 	}
 
-	@Environment(EnvType.CLIENT)
 	void randomDisplayTick(BlockState blockState_1, World world_1, BlockPos blockPos_1, Random random_1);
 
 	void scheduledTick(BlockState blockState_1, ServerWorld world_1, BlockPos blockPos_1, Random random_1);

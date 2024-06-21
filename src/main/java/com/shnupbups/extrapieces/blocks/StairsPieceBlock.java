@@ -17,7 +17,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 @SuppressWarnings("deprecation")
 public class StairsPieceBlock extends StairsBlock implements PieceBlock {

@@ -42,7 +42,7 @@ import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.tick.OrderedTick;
 import net.minecraft.world.tick.TickPriority;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 @SuppressWarnings("deprecation")
 public class SidingPieceBlock extends Block implements Waterloggable, PieceBlock {
@@ -118,7 +118,7 @@ public class SidingPieceBlock extends Block implements Waterloggable, PieceBlock
 			return blockState_1.with(TYPE, ModProperties.SidingType.DOUBLE).with(FACING_HORIZONTAL, blockState_1.get(FACING_HORIZONTAL)).with(WATERLOGGED, false);
 		} else {
 			FluidState fluidState_1 = itemPlacementContext_1.getWorld().getFluidState(blockPos_1);
-			Direction playerHorizontalFacing = itemPlacementContext_1.getPlayerLookDirection();
+			Direction playerHorizontalFacing = itemPlacementContext_1.getHorizontalPlayerFacing();
 			Direction facing = itemPlacementContext_1.getSide();
 			double xPos = itemPlacementContext_1.getHitPos().getX() - blockPos_1.getX();
 			double zPos = itemPlacementContext_1.getHitPos().getZ() - blockPos_1.getZ();

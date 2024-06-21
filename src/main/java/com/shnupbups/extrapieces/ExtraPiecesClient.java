@@ -19,6 +19,5 @@ public class ExtraPiecesClient implements ClientModInitializer {
 		}*/
 
 		ModRenderLayers.init();
-		ModModels.init(ExtraPieces.PACK);
 	}
 }

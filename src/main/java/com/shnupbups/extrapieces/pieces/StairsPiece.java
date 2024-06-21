@@ -52,175 +52,96 @@ public class StairsPiece extends PieceType {
 					for (StairShape s : StairShape.values()) {
 						String varname = "facing=" + d.asString() + ",half=" + h.asString() + ",shape=" + s.asString();
 						JVariant var = JState.variant();
-						JBlockModel model = JState.model("");
+						JBlockModel model;
 						int y = 0;
-						switch (s) {
-							case STRAIGHT:
-								model = JState.model(getModelPath(pb)).uvlock();
-								switch (d) {
-									case EAST:
-										y = 0;
-										break;
-									case WEST:
-										y = 180;
-										break;
-									case NORTH:
-										y = 270;
-										break;
-									case SOUTH:
-										y = 90;
-										break;
-								}
-								break;
-							case OUTER_RIGHT:
-								model = JState.model(getModelPath(pb, "outer")).uvlock();
-								switch (h) {
-									case BOTTOM:
-										switch (d) {
-											case EAST:
-												y = 0;
-												break;
-											case WEST:
-												y = 180;
-												break;
-											case NORTH:
-												y = 270;
-												break;
-											case SOUTH:
-												y = 90;
-												break;
-										}
-										break;
-									case TOP:
-										switch (d) {
-											case EAST:
-												y = 90;
-												break;
-											case WEST:
-												y = 270;
-												break;
-											case NORTH:
-												y = 0;
-												break;
-											case SOUTH:
-												y = 180;
-												break;
-										}
-										break;
-								}
-								break;
-							case OUTER_LEFT:
-								model = JState.model(getModelPath(pb, "outer")).uvlock();
-								switch (h) {
-									case BOTTOM:
-										switch (d) {
-											case EAST:
-												y = 270;
-												break;
-											case WEST:
-												y = 90;
-												break;
-											case NORTH:
-												y = 180;
-												break;
-											case SOUTH:
-												y = 0;
-												break;
-										}
-										break;
-									case TOP:
-										switch (d) {
-											case EAST:
-												y = 0;
-												break;
-											case WEST:
-												y = 180;
-												break;
-											case NORTH:
-												y = 270;
-												break;
-											case SOUTH:
-												y = 90;
-												break;
-										}
-										break;
-								}
-								break;
-							case INNER_RIGHT:
-								model = JState.model(getModelPath(pb, "inner"));
-								switch (h) {
-									case BOTTOM:
-										switch (d) {
-											case EAST:
-												y = 0;
-												break;
-											case WEST:
-												y = 180;
-												break;
-											case SOUTH:
-												y = 90;
-												break;
-											case NORTH:
-												y = 270;
-												break;
-										}
-										break;
-									case TOP:
-										switch (d) {
-											case EAST:
-												y = 90;
-												break;
-											case WEST:
-												y = 270;
-												break;
-											case NORTH:
-												y = 0;
-												break;
-											case SOUTH:
-												y = 180;
-												break;
-										}
-										break;
-								}
-								break;
-							case INNER_LEFT:
-								model = JState.model(getModelPath(pb, "inner"));
-								switch (h) {
-									case BOTTOM:
-										switch (d) {
-											case EAST:
-												y = 270;
-												break;
-											case WEST:
-												y = 90;
-												break;
-											case NORTH:
-												y = 180;
-												break;
-											case SOUTH:
-												y = 0;
-												break;
-										}
-										break;
-									case TOP:
-										switch (d) {
-											case EAST:
-												y = 0;
-												break;
-											case WEST:
-												y = 180;
-												break;
-											case NORTH:
-												y = 270;
-												break;
-											case SOUTH:
-												y = 90;
-												break;
-										}
-										break;
-								}
-								break;
-						}
+                        y = switch (s) {
+                            case STRAIGHT -> {
+                                model = JState.model(getModelPath(pb)).uvlock();
+                                yield switch (d) {
+                                    case EAST -> 0;
+                                    case WEST -> 180;
+                                    case NORTH -> 270;
+                                    case SOUTH -> 90;
+                                    default -> y;
+                                };
+                            }
+                            case OUTER_RIGHT -> {
+                                model = JState.model(getModelPath(pb, "outer")).uvlock();
+                                yield switch (h) {
+                                    case BOTTOM -> switch (d) {
+                                        case EAST -> 0;
+                                        case WEST -> 180;
+                                        case NORTH -> 270;
+                                        case SOUTH -> 90;
+                                        default -> y;
+                                    };
+                                    case TOP -> switch (d) {
+                                        case EAST -> 90;
+                                        case WEST -> 270;
+                                        case NORTH -> 0;
+                                        case SOUTH -> 180;
+                                        default -> y;
+                                    };
+                                };
+                            }
+                            case OUTER_LEFT -> {
+                                model = JState.model(getModelPath(pb, "outer")).uvlock();
+                                yield switch (h) {
+                                    case BOTTOM -> switch (d) {
+                                        case EAST -> 270;
+                                        case WEST -> 90;
+                                        case NORTH -> 180;
+                                        case SOUTH -> 0;
+                                        default -> y;
+                                    };
+                                    case TOP -> switch (d) {
+                                        case EAST -> 0;
+                                        case WEST -> 180;
+                                        case NORTH -> 270;
+                                        case SOUTH -> 90;
+                                        default -> y;
+                                    };
+                                };
+                            }
+                            case INNER_RIGHT -> {
+                                model = JState.model(getModelPath(pb, "inner"));
+                                yield switch (h) {
+                                    case BOTTOM -> switch (d) {
+                                        case EAST -> 0;
+                                        case WEST -> 180;
+                                        case SOUTH -> 90;
+                                        case NORTH -> 270;
+                                        default -> y;
+                                    };
+                                    case TOP -> switch (d) {
+                                        case EAST -> 90;
+                                        case WEST -> 270;
+                                        case NORTH -> 0;
+                                        case SOUTH -> 180;
+                                        default -> y;
+                                    };
+                                };
+                            }
+                            case INNER_LEFT -> {
+                                model = JState.model(getModelPath(pb, "inner"));
+                                yield switch (h) {
+                                    case BOTTOM -> switch (d) {
+                                        case EAST -> 270;
+                                        case WEST -> 90;
+                                        case NORTH -> 180;
+                                        case SOUTH -> 0;
+                                        default -> y;
+                                    };
+                                    case TOP -> switch (d) {
+                                        case EAST -> 0;
+                                        case WEST -> 180;
+                                        case NORTH -> 270;
+                                        case SOUTH -> 90;
+                                        default -> y;
+                                    };
+                                };
+                            }
+                        };
 						if (h.equals(BlockHalf.TOP)) model.x(180);
 						var.put(varname, model.y(y));
 						state.add(var);

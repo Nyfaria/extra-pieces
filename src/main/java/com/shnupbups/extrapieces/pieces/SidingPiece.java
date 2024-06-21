@@ -73,12 +73,12 @@ public class SidingPiece extends PieceType {
 
     public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
         JState state = new JState();
+        JVariant var = new JVariant();
         for (ModProperties.SidingType t : ModProperties.SidingType.values()) {
             switch (t) {
                 case SINGLE:
                     for (Direction d : Direction.values()) {
                         if (!(d.equals(Direction.DOWN) || d.equals(Direction.UP))) {
-                            JVariant var = new JVariant();
                             JBlockModel model = JState.model(getModelPath(pb)).uvlock();
                             switch (d) {
                                 case EAST:
@@ -92,19 +92,17 @@ public class SidingPiece extends PieceType {
                                     break;
                             }
                             var.put("type=" + t.asString() + ",facing=" + d.asString(), model);
-                            state.add(var);
                         }
                     }
                     break;
                 case DOUBLE:
-                    JVariant var = new JVariant();
                     JBlockModel model = JState.model(getModelPath(pb, "double"));
                     var.put("type=" + t.asString(), model);
-                    state.add(var);
                     break;
             }
 
         }
+        state.add(var);
 
         pack.addBlockState(state, Registries.BLOCK.getId(pb.getBlock()));
     }

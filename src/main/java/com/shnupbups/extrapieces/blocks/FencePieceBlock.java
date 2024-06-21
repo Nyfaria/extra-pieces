@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.explosion.Explosion;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 @SuppressWarnings("deprecation")
 public class FencePieceBlock extends FenceBlock implements PieceBlock {

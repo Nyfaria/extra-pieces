@@ -18,9 +18,12 @@ import net.devtech.arrp.json.loot.JLootTable;
 import net.devtech.arrp.json.loot.JPool;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.registry.Registries;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SlabPiece extends PieceType {
 	public SlabPiece() {
@@ -75,23 +78,22 @@ public class SlabPiece extends PieceType {
 	}
 
 	public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
-		JState state = new JState();
-		for (SlabType t : SlabType.values()) {
-			JVariant var = JState.variant();
-			switch (t) {
-				case BOTTOM:
-					var.put("type=" + t.asString(),JState.model(getModelPath(pb)));
-					break;
-				case TOP:
-					var.put("type=" + t.asString(),JState.model(getModelPath(pb, "top")));
-					break;
-				case DOUBLE:
-					var.put("type=" + t.asString(),JState.model(getModelPath(pb, "double")));
-					break;
+		JVariant var = JState.variant();
+		for(boolean b : Properties.WATERLOGGED.getValues()) {
+			for (SlabType t : SlabType.values()) {
+				switch (t) {
+					case BOTTOM:
+						var.put("type=" + t.asString() +",waterlogged=" + b, JState.model(getModelPath(pb)));
+						break;
+					case TOP:
+						var.put("type=" + t.asString() +",waterlogged=" + b, JState.model(getModelPath(pb, "top")));
+						break;
+					case DOUBLE:
+						var.put("type=" + t.asString() +",waterlogged=" + b, JState.model(getModelPath(pb, "double")));
+						break;
+				}
 			}
-			state.add(var);
 		}
-
-		pack.addBlockState(state,Registries.BLOCK.getId(pb.getBlock()));
+		pack.addBlockState(JState.state(var),Registries.BLOCK.getId(pb.getBlock()));
 	}
 }

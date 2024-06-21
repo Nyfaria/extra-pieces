@@ -7,6 +7,7 @@ import com.shnupbups.extrapieces.core.PieceSets;
 import com.shnupbups.extrapieces.core.PieceTypes;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
+import net.fabricmc.fabric.impl.resource.loader.BuiltinModResourcePackSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.Registries;
@@ -421,6 +422,27 @@ public class ModBlocks {
 	}
 
 	public static void init(RuntimeResourcePack data) {
+		/* TODO: This needs to be examined a little more closely but this appears to be an unnecessary O(N^2) operation;
+		 * For each block in the registry it goes through *every* primedBuilder to see if it's ready, and whether or not
+		 * it is, registers an individual RegistryEntryAddedCallback for it that never goes away.
+		 *
+		 * When complete, this will probably double-check that every builder is removed from primed / ready to remove from
+		 * primed, and finish (which generates the related assets and data)
+		 *
+		 *
+		 */
+
+//		setBuilders.forEach(
+//				(id,setbuilder)->{
+//					PieceSet set = setbuilder.build();
+//					set.generate();
+//					set.register();
+//				}
+//		);
+//		PieceSet set = setBuilders.get(setBuilders.keySet().stream().toList().get(0)).build();
+//		set.generate();
+//		set.register();
+
 		visitRegistry(Registries.BLOCK, (id, block) -> {
 			if (!finished) {
 				Iterator<PieceSet.Builder> primed = primedBuilders.iterator();
@@ -432,7 +454,7 @@ public class ModBlocks {
 					if (!builder.isBuilt() && builder.isReady()) {
 						ExtraPieces.moreDebugLog("Block "+id.toString()+" registered, triggering a PSB.");
 						ExtraPieces.debugLog("Deferred PieceSet Builder" + builder + " now ready! Building...");
-						builder.build().register(data);
+						builder.build().register();
 						primed.remove();
 					}
 				}
@@ -441,7 +463,7 @@ public class ModBlocks {
 
 				if (current != null && !current.isBuilt()) {
 					if (current.isReady()) {
-						current.build().register(data);
+						current.build().register();
 					} else {
 						ExtraPieces.debugLog("PieceSet Builder" + current + " not yet ready! Deferring to delayed build...");
 						primedBuilders.add(setBuilders.get(id));
@@ -464,7 +486,7 @@ public class ModBlocks {
 					builder = primed.next();
 
 					if (!builder.isBuilt() && builder.isReady()) {
-						builder.build().register(data);
+						builder.build().register();
 						primed.remove();
 					}
 				}

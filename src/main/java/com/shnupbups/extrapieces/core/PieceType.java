@@ -146,16 +146,17 @@ public abstract class PieceType {
     }
 
     public void addItemModel(RuntimeResourcePack pack, PieceBlock pb) {
-        pack.addModel(new JModel().parent(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/").toString()),Registries.BLOCK.getId(pb.getBlock()));
+        pack.addModel(new JModel().parent(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/").toString()),Registries.BLOCK.getId(pb.getBlock()).withPrefixedPath("item/"));
     }
 
     public void addBlockModel(RuntimeResourcePack pack, PieceBlock pb, String append) {
+        Identifier blah = ExtraPieces.appendToPath(Registries.BLOCK.getId(pb.getBlock()), "_" + append).withPrefixedPath("block/");
         pack.addModel(new JModel().parent(ExtraPieces.prependToPath(ExtraPieces.appendToPath(this.getId(), "_" + append), "block/dummy_").toString()).textures(
                 new JTextures().particle(pb.getSet().getMainTexture().toString())
                         .var("main", pb.getSet().getMainTexture().toString())
                         .var("top", pb.getSet().getTopTexture().toString())
                         .var("bottom", pb.getSet().getBottomTexture().toString())
-        ), ExtraPieces.appendToPath(Registries.BLOCK.getId(pb.getBlock()), "_" + append));
+        ), blah);
     }
 
     public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
