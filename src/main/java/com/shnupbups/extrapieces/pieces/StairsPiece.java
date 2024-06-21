@@ -46,12 +46,12 @@ public class StairsPiece extends PieceType {
 
 	public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
 		JState state = new JState();
-		for (Direction d : Direction.values()) {
-			if (!(d.equals(Direction.DOWN) || d.equals(Direction.UP))) {
-				for (BlockHalf h : BlockHalf.values()) {
-					for (StairShape s : StairShape.values()) {
-						String varname = "facing=" + d.asString() + ",half=" + h.asString() + ",shape=" + s.asString();
-						JVariant var = JState.variant();
+        JVariant var = JState.variant();
+        for (Direction d : Direction.values()) {
+            if (!(d.equals(Direction.DOWN) || d.equals(Direction.UP))) {
+                for (BlockHalf h : BlockHalf.values()) {
+                    for (StairShape s : StairShape.values()) {
+                        String varname = "facing=" + d.asString() + ",half=" + h.asString() + ",shape=" + s.asString();
 						JBlockModel model;
 						int y = 0;
                         y = switch (s) {
@@ -144,13 +144,11 @@ public class StairsPiece extends PieceType {
                         };
 						if (h.equals(BlockHalf.TOP)) model.x(180);
 						var.put(varname, model.y(y));
-						state.add(var);
 					}
-				}
-			}
-		}
-		state.add(new JVariant().put("facing=east,half=bottom,shape=straight", JState.model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/")).uvlock()));
-		state.add(new JVariant().put("facing=west,half=bottom,shape=straight", JState.model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/")).y(180).uvlock()));
+                }
+            }
+        }
+        state.add(var.put("facing=east,half=bottom,shape=straight", JState.model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/")).uvlock()).put("facing=west,half=bottom,shape=straight", JState.model(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "block/")).y(180).uvlock()));
 		pack.addBlockState(state, Registries.BLOCK.getId(pb.getBlock()) );
 	}
 }

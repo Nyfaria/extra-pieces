@@ -46,8 +46,8 @@ public class WallPieceBlock extends WallBlock implements PieceBlock {
 	public PieceType getType() {
 		return PieceTypes.WALL;
 	}
-
-	@Environment(EnvType.CLIENT)
+//
+//	@Environment(EnvType.CLIENT)
 	@Override
 	public void randomDisplayTick(BlockState blockState_1, World world_1, BlockPos blockPos_1, Random random_1) {
 		super.randomDisplayTick(blockState_1, world_1, blockPos_1, (net.minecraft.util.math.random.Random) random_1);
@@ -124,12 +124,12 @@ public class WallPieceBlock extends WallBlock implements PieceBlock {
 	public boolean isSideInvisible(BlockState blockState_1, BlockState blockState_2, Direction direction_1) {
 		return getSet().isTransparent() ? (blockState_2.getBlock() == this || super.isSideInvisible(blockState_1, blockState_2, direction_1)) : super.isSideInvisible(blockState_1, blockState_2, direction_1);
 	}
-	
+
 	@Override
 	public boolean emitsRedstonePower(BlockState blockState_1) {
 		return super.emitsRedstonePower(blockState_1) || this.getBaseState().emitsRedstonePower();
 	}
-	
+
 	@Override
 	public int getWeakRedstonePower(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, Direction direction_1) {
 		return this.getBaseState().getWeakRedstonePower(blockView_1, blockPos_1, direction_1);

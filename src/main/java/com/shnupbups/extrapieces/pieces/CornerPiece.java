@@ -32,9 +32,9 @@ public class CornerPiece extends PieceType {
 
 	public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
 		JState state = new JState();
+		JVariant var = JState.variant();
 		for (Direction d : Direction.values()) {
 			if (d != Direction.UP && d != Direction.DOWN) {
-				JVariant var = JState.variant();
 				JBlockModel model = JState.model(getModelPath(pb)).uvlock();
 				switch (d) {
 					case SOUTH:
@@ -48,9 +48,9 @@ public class CornerPiece extends PieceType {
 						break;
 				}
 				var.put("facing=" + d.asString(), model);
-				state.add(var);
 			}
 		}
+		state.add(var);
 		pack.addBlockState(state,Registries.BLOCK.getId(pb.getBlock()));
 	}
 }

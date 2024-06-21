@@ -22,8 +22,8 @@ public class PostPiece extends PieceType {
 
 	public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
 		JState state = JState.state();
+		JVariant var = JState.variant();
 		for (Direction.Axis a : Direction.Axis.values()) {
-			JVariant var = JState.variant();
 			JBlockModel model = JState.model(getModelPath(pb)).uvlock();
 			if (a != Direction.Axis.Y) {
 				model.x(90);
@@ -31,8 +31,9 @@ public class PostPiece extends PieceType {
 					model.y(90);
 				}
 			}
-			state.add(var);
+			var.put("axis=" + a.asString(), model);
 		}
+		state.add(var);
 		pack.addBlockState(state,Registries.BLOCK.getId(pb.getBlock()));
 	}
 }

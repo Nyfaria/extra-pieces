@@ -188,7 +188,7 @@ public class CornerPieceBlock extends Block implements Waterloggable, PieceBlock
 		FluidState fluidState_1 = itemPlacementContext_1.getWorld().getFluidState(blockPos_1);
 		double xPos = itemPlacementContext_1.getHitPos().getX() - blockPos_1.getX();
 		double zPos = itemPlacementContext_1.getHitPos().getZ() - blockPos_1.getZ();
-		Direction direction_1 = itemPlacementContext_1.getPlayerLookDirection().getOpposite();
+		Direction direction_1 = itemPlacementContext_1.getHorizontalPlayerFacing().getOpposite();
 		if (direction_1 == Direction.EAST) {
 			if (zPos < 0.5) direction_1 = direction_1.rotateYClockwise();
 		} else if (direction_1 == Direction.WEST) {

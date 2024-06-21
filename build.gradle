@@ -18,6 +18,9 @@ repositories {
 		// for 0.4.2 and older
 		// url uri("https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/")
 	}
+	flatDir {
+		dir 'libs'
+	}
 }
 
 dependencies {
@@ -40,6 +43,8 @@ dependencies {
 	modImplementation "blue.endless:jankson:${project.jankson_version}"
 	include "blue.endless:jankson:${project.jankson_version}"
 	modImplementation("net.devtech:arrp:0.8.+")
+
+
 }
 
 processResources {

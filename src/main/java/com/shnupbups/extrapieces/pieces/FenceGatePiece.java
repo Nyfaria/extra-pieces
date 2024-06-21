@@ -41,30 +41,24 @@ public class FenceGatePiece extends PieceType {
 	//todo: make sure correct
 	public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
 		JState state = JState.state();
+		JVariant var = new JVariant();
 		for (Direction d : Direction.values()) {
 			if (d != Direction.UP && d != Direction.DOWN) {
 				JBlockModel model = JState.model(getModelPath(pb)).uvlock();
-				JVariant var = new JVariant();
 				setYRot(d, var, model);
 				var.put("facing=" + d.asString() + ",in_wall=false,open=false", model);
-				JVariant var4 = new JVariant();
 				JBlockModel model4 = JState.model(getModelPath(pb, "wall")).uvlock();
-				setYRot(d, var4, model4);
-				var4.put("facing=" + d.asString() + ",in_wall=true,open=false", model4);
-				JVariant var3 = new JVariant();
+				setYRot(d, var, model4);
+				var.put("facing=" + d.asString() + ",in_wall=true,open=false", model4);
 				JBlockModel model3 = JState.model(getModelPath(pb, "open")).uvlock();
-				setYRot(d, var3, model3);
-				var3.put("facing=" + d.asString() + ",in_wall=false,open=true", model3);
-				JVariant var2 = new JVariant();
+				setYRot(d, var, model3);
+				var.put("facing=" + d.asString() + ",in_wall=false,open=true", model3);
 				JBlockModel model2 = JState.model(getModelPath(pb, "wall_open")).uvlock();
-				setYRot(d, var2, model2);
-				var2.put("facing=" + d.asString() + ",in_wall=true,open=true", model2);
-				state.add(var);
-				state.add(var2);
-				state.add(var3);
-				state.add(var4);
+				setYRot(d, var, model2);
+				var.put("facing=" + d.asString() + ",in_wall=true,open=true", model2);
 			}
 		}
+		state.add(var);
 		pack.addBlockState(state,Registries.BLOCK.getId(pb.getBlock()));
 	}
 

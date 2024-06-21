@@ -283,16 +283,16 @@ public class PieceSet {
 //				pieces.put(p, p.getNew(this));
 //			}
 //		}
-//        doPiece(PieceTypes.COLUMN);
-//        doPiece(PieceTypes.STAIRS);
-//        doPiece(PieceTypes.POST);
+        doPiece(PieceTypes.COLUMN);
+        doPiece(PieceTypes.STAIRS);
+        doPiece(PieceTypes.POST);
 //        doPiece(PieceTypes.LAYER);
         doPiece(PieceTypes.SLAB);
         doPiece(PieceTypes.SIDING);
         doPiece(PieceTypes.CORNER);
-//        doPiece(PieceTypes.WALL);
+        doPiece(PieceTypes.WALL);
 //        doPiece(PieceTypes.FENCE);
-//        doPiece(PieceTypes.FENCE_GATE);
+        doPiece(PieceTypes.FENCE_GATE);
         return this;
     }
     public void doPiece(PieceType i){
