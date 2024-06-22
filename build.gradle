@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.11-SNAPSHOT'
 	id 'maven-publish'
+	id "me.modmuss50.mod-publish-plugin" version "0.3.3"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -42,7 +43,7 @@ dependencies {
 	
 	modImplementation "blue.endless:jankson:${project.jankson_version}"
 	include "blue.endless:jankson:${project.jankson_version}"
-	modImplementation("net.devtech:arrp:0.8.+")
+	modImplementation(include("net.devtech:arrp:0.8.+"))
 
 
 }
@@ -72,5 +73,29 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+publishMods {
+	if(publishFabric) {
+		file = remapJar.archiveFile
+		changelog = file("changelog.md").text
+		type = STABLE
+		modLoaders.add("fabric")
+		displayName = "Extra Pieces-${minecraft_version}-[Fabric]-${project.property('version')}"
+		if (curseforge_publishing_enabled.toBoolean()) {
+			curseforge {
+				projectId = curseforge_project_id
+				accessToken = curseforge_token
+				minecraftVersions.add(minecraft_version)
+			}
+		}
+		if (modrinth_publishing_enabled.toBoolean()) {
+			modrinth {
+				accessToken = modrinth_token
+				projectId = modrinth_project_id
+				minecraftVersions.add(minecraft_version)
+			}
+		}
 	}
 }

@@ -53,16 +53,16 @@ public class LayerPiece extends PieceType {
 
     public void addItemModel(RuntimeResourcePack pack, PieceBlock pb) {
         JModel model = new JModel();
-        model.parent(getModelPath(pb, "block/layer/height_2").toString());
-        pack.addModel(model, Registries.ITEM.getId(getBlockItem(pb)));
+        model.parent(getModelPath(pb, "height_2").toString());
+        pack.addModel(model, Registries.ITEM.getId(pb.asItem()).withPrefixedPath("item/"));
     }
 
     public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
         JState state = new JState();
+        JVariant var = JState.variant();
         for (Direction dir : Direction.values()) {
             for (int i = 1; i <= 8; i++) {
                 final int j = i * 2;
-                JVariant var = JState.variant();
                 JBlockModel model = JState.model(getModelPath(pb, "height_" + j));
                 model.uvlock();
                 switch (dir) {
@@ -86,9 +86,9 @@ public class LayerPiece extends PieceType {
                         break;
                 }
                 var.put("facing=" + dir.asString() + ",layers=" + i, model);
-                state.add(var);
             }
         }
+        state.add(var);
         pack.addBlockState(state,Registries.BLOCK.getId(pb.getBlock()));
     }
 
@@ -98,20 +98,21 @@ public class LayerPiece extends PieceType {
 
     @Override
     public void addLootTable(RuntimeResourcePack data, PieceBlock pb) {
-        JLootTable loot = new JLootTable("block");
+        JLootTable loot = new JLootTable("minecraft:block");
         JPool pool = new JPool();
         pool.rolls(1);
         JEntry entry = new JEntry();
         entry.type("minecraft:item");
         entry.name(Registries.BLOCK.getId(pb.getBlock()).toString());
         for (int i = 1; i <= 8; i++) {
-            JFunction function = new JFunction("set_count");
+            JFunction function = new JFunction("minecraft:set_count");
             function.parameter("count",i);
             JCondition condition = JLootTable.predicate("block_state_property");
             condition.parameter("block", Registries.BLOCK.getId(pb.getBlock()));
             JsonObject properties = new JsonObject();
             properties.addProperty("layers", i);
             condition.parameter("properties", properties);
+            function.condition(condition);
             entry.function(function);
         }
         entry.function("explosion_decay");

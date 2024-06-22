@@ -38,8 +38,8 @@ public class ModTags {
 			for (Identifier identifier : identifiers) {
 				tag.add(identifier);
 			}
-			data.addTag(entry.getKey().getTagId().withPrefixedPath("block/"), tag);
-			data.addTag(entry.getKey().getTagId().withPrefixedPath("item/"), tag);
+			data.addTag(entry.getKey().getTagId().withPrefixedPath("blocks/"), tag);
+			data.addTag(entry.getKey().getTagId().withPrefixedPath("items/"), tag);
 
 //			data.addItemTag(entry.getKey().getTagId(), new TagBuilder<Item>().replace(false).values(identifiers.toArray(new Identifier[0])));
 			ExtraPieces.debugLog("Added block and item tags for " + type.toString() + ", " + identifiers.size() + " entries.");

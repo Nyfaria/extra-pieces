@@ -35,6 +35,8 @@ public class ModBlocks {
     public static PieceSet PRISMARINE_BRICK_PIECES;
     public static PieceSet DARK_PRISMARINE_PIECES;
     public static PieceSet OAK_PIECES;
+    public static PieceSet CHERRY_PIECES;
+    public static PieceSet MANGROVE_PIECES;
     public static PieceSet SPRUCE_PIECES;
     public static PieceSet BIRCH_PIECES;
     public static PieceSet JUNGLE_PIECES;
@@ -44,7 +46,6 @@ public class ModBlocks {
     public static PieceSet SMOOTH_STONE_PIECES;
     public static PieceSet SANDSTONE_PIECES;
     public static PieceSet CUT_SANDSTONE_PIECES;
-    public static PieceSet PETRIFIED_OAK_PIECES;
     public static PieceSet COBBLESTONE_PIECES;
     public static PieceSet BRICK_PIECES;
     public static PieceSet STONE_BRICK_PIECES;
@@ -110,6 +111,7 @@ public class ModBlocks {
     public static PieceSet BLACK_CONCRETE_PIECES;
     public static PieceSet GOLD_PIECES;
     public static PieceSet IRON_PIECES;
+    public static PieceSet COPPER_PIECES;
     public static PieceSet DIAMOND_PIECES;
     public static PieceSet EMERALD_PIECES;
     public static PieceSet REDSTONE_PIECES;
@@ -218,6 +220,8 @@ public class ModBlocks {
         PRISMARINE_BRICK_PIECES = PieceSets.createDefaultSet(Blocks.PRISMARINE_BRICKS, "prismarine_brick", PieceSet.NO_SLAB_OR_STAIRS).addVanillaPiece(PieceTypes.SLAB, Blocks.PRISMARINE_BRICK_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.PRISMARINE_BRICK_STAIRS);
         DARK_PRISMARINE_PIECES = PieceSets.createDefaultSet(Blocks.DARK_PRISMARINE, "dark_prismarine", PieceSet.NO_SLAB_OR_STAIRS).addVanillaPiece(PieceTypes.SLAB, Blocks.DARK_PRISMARINE_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.DARK_PRISMARINE_STAIRS);
         OAK_PIECES = PieceSets.createDefaultSet(Blocks.OAK_PLANKS, "oak", PieceSet.JUST_EXTRAS_AND_WALL).setUncraftable(PieceTypes.WALL).addVanillaPiece(PieceTypes.SLAB, Blocks.OAK_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.OAK_STAIRS).addVanillaPiece(PieceTypes.FENCE, Blocks.OAK_FENCE).addVanillaPiece(PieceTypes.FENCE_GATE, Blocks.OAK_FENCE_GATE);
+        CHERRY_PIECES = PieceSets.createDefaultSet(Blocks.CHERRY_PLANKS, "cherry", PieceSet.JUST_EXTRAS_AND_WALL).setUncraftable(PieceTypes.WALL).addVanillaPiece(PieceTypes.SLAB, Blocks.CHERRY_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.CHERRY_STAIRS).addVanillaPiece(PieceTypes.FENCE, Blocks.CHERRY_FENCE).addVanillaPiece(PieceTypes.FENCE_GATE, Blocks.CHERRY_FENCE_GATE);
+        MANGROVE_PIECES = PieceSets.createDefaultSet(Blocks.MANGROVE_PLANKS, "mangrove", PieceSet.JUST_EXTRAS_AND_WALL).setUncraftable(PieceTypes.WALL).addVanillaPiece(PieceTypes.SLAB, Blocks.MANGROVE_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.MANGROVE_STAIRS).addVanillaPiece(PieceTypes.FENCE, Blocks.MANGROVE_FENCE).addVanillaPiece(PieceTypes.FENCE_GATE, Blocks.MANGROVE_FENCE_GATE);
         SPRUCE_PIECES = PieceSets.createDefaultSet(Blocks.SPRUCE_PLANKS, "spruce", PieceSet.JUST_EXTRAS_AND_WALL).setUncraftable(PieceTypes.WALL).addVanillaPiece(PieceTypes.SLAB, Blocks.SPRUCE_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.SPRUCE_STAIRS).addVanillaPiece(PieceTypes.FENCE, Blocks.SPRUCE_FENCE).addVanillaPiece(PieceTypes.FENCE_GATE, Blocks.SPRUCE_FENCE_GATE);
         BIRCH_PIECES = PieceSets.createDefaultSet(Blocks.BIRCH_PLANKS, "birch", PieceSet.JUST_EXTRAS_AND_WALL).setUncraftable(PieceTypes.WALL).addVanillaPiece(PieceTypes.SLAB, Blocks.BIRCH_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.BIRCH_STAIRS).addVanillaPiece(PieceTypes.FENCE, Blocks.BIRCH_FENCE).addVanillaPiece(PieceTypes.FENCE_GATE, Blocks.BIRCH_FENCE_GATE);
         JUNGLE_PIECES = PieceSets.createDefaultSet(Blocks.JUNGLE_PLANKS, "jungle", PieceSet.JUST_EXTRAS_AND_WALL).setUncraftable(PieceTypes.WALL).addVanillaPiece(PieceTypes.SLAB, Blocks.JUNGLE_SLAB).addVanillaPiece(PieceTypes.STAIRS, Blocks.JUNGLE_STAIRS).addVanillaPiece(PieceTypes.FENCE, Blocks.JUNGLE_FENCE).addVanillaPiece(PieceTypes.FENCE_GATE, Blocks.JUNGLE_FENCE_GATE);
@@ -293,6 +297,7 @@ public class ModBlocks {
         BLACK_CONCRETE_PIECES = PieceSets.createDefaultSet(Blocks.BLACK_CONCRETE, "black_concrete");
         GOLD_PIECES = PieceSets.createDefaultSet(Blocks.GOLD_BLOCK, "gold");
         IRON_PIECES = PieceSets.createDefaultSet(Blocks.IRON_BLOCK, "iron");
+        COPPER_PIECES = PieceSets.createDefaultSet(Blocks.COPPER_BLOCK, "copper");
         DIAMOND_PIECES = PieceSets.createDefaultSet(Blocks.DIAMOND_BLOCK, "diamond");
         EMERALD_PIECES = PieceSets.createDefaultSet(Blocks.EMERALD_BLOCK, "emerald");
         REDSTONE_PIECES = PieceSets.createDefaultSet(Blocks.REDSTONE_BLOCK, "redstone");

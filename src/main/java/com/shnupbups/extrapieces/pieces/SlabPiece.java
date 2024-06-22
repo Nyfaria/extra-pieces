@@ -50,22 +50,24 @@ public class SlabPiece extends PieceType {
 
 	@Override
 	public void addLootTable(RuntimeResourcePack data, PieceBlock pb) {
-		JLootTable loot = new JLootTable("block");
+		JLootTable loot = new JLootTable("minecraft:block");
 		JPool pool = new JPool();
 		pool.rolls(1);
+		pool.bonus(0);
 		JEntry entry = new JEntry();
-		entry.type("item");
+		entry.type("minecraft:item");
 		entry.name(Registries.BLOCK.getId(pb.getBlock()).toString());
-		JFunction function = new JFunction("set_count");
+		JFunction function = new JFunction("minecraft:set_count");
+		function.parameter("add", false);
+		JCondition condition = new JCondition("minecraft:block_state_property");
+		condition.parameter("block", Registries.BLOCK.getId(pb.getBlock()).toString());
 		function.parameter("count", 2);
-		JCondition condition = new JCondition("block_state_property");
-		condition.parameter("type", "double");
 		JsonObject properties = new JsonObject();
-		properties.addProperty("type", "bottom");
+		properties.addProperty("type", "double");
 		condition.parameter("properties", properties);
 		function.condition(condition);
 		entry.function(function);
-		entry.function(new JFunction("explosion_decay"));
+		entry.function(new JFunction("minecraft:explosion_decay"));
 		pool.entry(entry);
 		loot.pool(pool);
 		data.addLootTable(ExtraPieces.prependToPath(Registries.BLOCK.getId(pb.getBlock()), "blocks/"), loot);

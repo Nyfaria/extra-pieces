@@ -123,7 +123,7 @@ public abstract class PieceType {
         JPool pool = new JPool();
         pool.rolls(1);
         JEntry entry = new JEntry();
-        entry.type("item");
+        entry.type("minecraft:item");
         entry.name(Registries.BLOCK.getId(pb.getBlock()).toString());
         pool.entry(entry);
         lootTable.pool(pool);

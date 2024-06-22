@@ -44,22 +44,22 @@ public class SidingPiece extends PieceType {
 
     @Override
     public void addLootTable(RuntimeResourcePack data, PieceBlock pb) {
-        JLootTable loot = new JLootTable("block");
+        JLootTable loot = new JLootTable("minecraft:block");
         JPool pool = new JPool();
         pool.rolls(1);
         JEntry entry = new JEntry();
-        entry.type("item");
+        entry.type("minecraft:item");
         entry.name(Registries.BLOCK.getId(pb.getBlock()).toString());
         JFunction func = new JFunction("set_count");
         func.parameter("count", 2);
-        JCondition cond = new JCondition("block_state_property");
+        JCondition cond = new JCondition("minecraft:block_state_property");
         cond.parameter("block", Registries.BLOCK.getId(pb.getBlock()).toString());
         JsonObject prop = new JsonObject();
         prop.addProperty("type", "double");
         cond.parameter("properties", prop);
         func.condition(cond);
         entry.function(func);
-        entry.function(new JFunction("explosion_decay"));
+        entry.function(new JFunction("minecraft:explosion_decay"));
         pool.entry(entry);
         loot.pool(pool);
 

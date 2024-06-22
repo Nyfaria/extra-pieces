@@ -286,12 +286,12 @@ public class PieceSet {
         doPiece(PieceTypes.COLUMN);
         doPiece(PieceTypes.STAIRS);
         doPiece(PieceTypes.POST);
-//        doPiece(PieceTypes.LAYER);
+        doPiece(PieceTypes.LAYER);
         doPiece(PieceTypes.SLAB);
         doPiece(PieceTypes.SIDING);
         doPiece(PieceTypes.CORNER);
         doPiece(PieceTypes.WALL);
-//        doPiece(PieceTypes.FENCE);
+        doPiece(PieceTypes.FENCE);
         doPiece(PieceTypes.FENCE_GATE);
         return this;
     }

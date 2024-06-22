@@ -29,7 +29,7 @@ public class FencePiece extends PieceType {
     }
 
     public Identifier getTagId() {
-        return new Identifier("minecraft", "fences");
+        return new Identifier("minecraft", "wooden_fences");
     }
 
     public ArrayList<ShapedPieceRecipe> getShapedRecipes() {
@@ -47,7 +47,7 @@ public class FencePiece extends PieceType {
     public void addItemModel(RuntimeResourcePack pack, PieceBlock pb) {
         JModel model = new JModel();
         model.parent(ExtraPieces.prependToPath(ExtraPieces.appendToPath(Registries.BLOCK.getId(pb.getBlock()), "_inventory"), "block/").toString());
-        pack.addModel(model, Registries.ITEM.getId(getBlockItem(pb)));
+        pack.addModel(model, Registries.ITEM.getId(pb.asItem()).withPrefixedPath("item/"));
     }
 
     public void addBlockstate(RuntimeResourcePack pack, PieceBlock pb) {
