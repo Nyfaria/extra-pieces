@@ -18,12 +18,14 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -208,10 +210,17 @@ public class LayerPieceBlock extends Block implements Waterloggable, PieceBlock 
 	}
 
 	@Override
+	public MutableText getName() {
+		return asItem().getName(ItemStack.EMPTY).copy();
+	}
+
+	@Override
 	public void onDestroyedByExplosion(World world_1, BlockPos blockPos_1, Explosion explosion_1) {
 		super.onDestroyedByExplosion(world_1, blockPos_1, explosion_1);
 		this.getBase().onDestroyedByExplosion(world_1, blockPos_1, explosion_1);
 	}
+
+
 
 	@Override
 	public boolean emitsRedstonePower(BlockState blockState_1) {
@@ -224,4 +233,5 @@ public class LayerPieceBlock extends Block implements Waterloggable, PieceBlock 
 		power = (power / 8) * blockState_1.get(LAYERS);
 		return Math.round(power);
 	}
+
 }

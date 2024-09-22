@@ -10,6 +10,6 @@ public class ModRenderLayers {
 			ps.addRenderLayers();
 		}
 
-		ExtraPieces.debugLog("Added render layers!");
+		ExtraPieces.log("Added render layers!");
 	}
 }

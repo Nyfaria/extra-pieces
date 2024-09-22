@@ -13,7 +13,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -34,7 +36,12 @@ public class FencePieceBlock extends FenceBlock implements PieceBlock {
 		super(FabricBlockSettings.copyOf(set.getBase()).materialColor(set.getBase().getDefaultMapColor()));
 		this.set = set;
 	}
-	
+
+	@Override
+	public MutableText getName() {
+		return asItem().getName(ItemStack.EMPTY).copy();
+	}
+
 	@Override
 	public Block getBlock() {
 		return this;

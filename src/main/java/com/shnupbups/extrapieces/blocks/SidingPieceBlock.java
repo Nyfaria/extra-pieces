@@ -28,6 +28,7 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -82,6 +83,11 @@ public class SidingPieceBlock extends Block implements Waterloggable, PieceBlock
 
 	public PieceType getType() {
 		return PieceTypes.SIDING;
+	}
+
+	@Override
+	public MutableText getName() {
+		return asItem().getName(ItemStack.EMPTY).copy();
 	}
 
 	public boolean hasSidedTransparency(BlockState blockState_1) {

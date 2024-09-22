@@ -19,11 +19,13 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -80,6 +82,11 @@ public class CornerPieceBlock extends Block implements Waterloggable, PieceBlock
 		super(FabricBlockSettings.copyOf(set.getBase()).materialColor(set.getBase().getDefaultMapColor()));
 		this.set = set;
 		this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
+	}
+
+	@Override
+	public MutableText getName() {
+		return asItem().getName(ItemStack.EMPTY).copy();
 	}
 
 	public PieceSet getSet() {

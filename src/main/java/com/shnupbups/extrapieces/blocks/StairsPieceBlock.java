@@ -11,7 +11,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -31,6 +33,13 @@ public class StairsPieceBlock extends StairsBlock implements PieceBlock {
 	public Block getBlock() {
 		return this;
 	}
+
+
+	@Override
+	public MutableText getName() {
+		return asItem().getName(ItemStack.EMPTY).copy();
+	}
+
 
 	public PieceSet getSet() {
 		return set;

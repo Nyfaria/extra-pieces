@@ -278,21 +278,12 @@ public class PieceSet {
      * @return This {@link PieceSet} with all {@link PieceType}s generated.
      */
     public PieceSet generate() {
-//		for (PieceType p : genTypes) {
-//			if (!hasPiece(p)) {
-//				pieces.put(p, p.getNew(this));
-//			}
-//		}
-        doPiece(PieceTypes.COLUMN);
-        doPiece(PieceTypes.STAIRS);
-        doPiece(PieceTypes.POST);
-        doPiece(PieceTypes.LAYER);
-        doPiece(PieceTypes.SLAB);
-        doPiece(PieceTypes.SIDING);
-        doPiece(PieceTypes.CORNER);
-        doPiece(PieceTypes.WALL);
-        doPiece(PieceTypes.FENCE);
-        doPiece(PieceTypes.FENCE_GATE);
+		for (PieceType p : genTypes) {
+            if(p==null) continue;
+			if (!hasPiece(p)) {
+				pieces.put(p, p.getNew(this));
+			}
+		}
         return this;
     }
     public void doPiece(PieceType i){
@@ -364,7 +355,7 @@ public class PieceSet {
      * @return Whether this {@link PieceSet} has a {@link PieceType} of type {@code piece}.
      */
     public boolean hasPiece(PieceType piece) {
-        return (pieces.containsKey(piece) || piece.equals(PieceTypes.BASE));
+        return (pieces.containsKey(piece) || PieceTypes.BASE.equals(piece));
     }
 
     public HashSet<PieceType> getPieceTypes() {

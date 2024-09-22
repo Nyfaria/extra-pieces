@@ -14,7 +14,9 @@ import net.minecraft.block.SlabBlock;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -51,6 +53,10 @@ public class SlabPieceBlock extends SlabBlock implements PieceBlock {
 	@Environment(EnvType.CLIENT)
 	public boolean isSideInvisible(BlockState blockState_1, BlockState blockState_2, Direction direction_1) {
 		return getSet().isTransparent() ? (blockState_2.getBlock() == this || super.isSideInvisible(blockState_1, blockState_2, direction_1)) : super.isSideInvisible(blockState_1, blockState_2, direction_1);
+	}
+	@Override
+	public MutableText getName() {
+		return asItem().getName(ItemStack.EMPTY).copy();
 	}
 
 	@Environment(EnvType.CLIENT)

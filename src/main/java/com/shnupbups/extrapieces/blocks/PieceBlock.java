@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -35,4 +36,5 @@ public interface PieceBlock extends ItemConvertible {
 	void randomDisplayTick(BlockState blockState_1, World world_1, BlockPos blockPos_1, Random random_1);
 
 	void scheduledTick(BlockState blockState_1, ServerWorld world_1, BlockPos blockPos_1, Random random_1);
+
 }

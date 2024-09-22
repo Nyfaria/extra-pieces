@@ -14,7 +14,9 @@ import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.WoodType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -54,6 +56,11 @@ public class FenceGatePieceBlock extends FenceGateBlock implements PieceBlock {
 	public void randomDisplayTick(BlockState blockState_1, World world_1, BlockPos blockPos_1, Random random_1) {
 		super.randomDisplayTick(blockState_1, world_1, blockPos_1, (net.minecraft.util.math.random.Random) random_1);
 		this.getBase().randomDisplayTick(this.getBaseState(), world_1, blockPos_1, (net.minecraft.util.math.random.Random) random_1);
+	}
+
+	@Override
+	public MutableText getName() {
+		return asItem().getName(ItemStack.EMPTY).copy();
 	}
 
 	@Override

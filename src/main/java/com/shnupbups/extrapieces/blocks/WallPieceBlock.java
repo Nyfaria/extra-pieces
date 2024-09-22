@@ -14,6 +14,7 @@ import net.minecraft.block.WallBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -33,6 +34,10 @@ public class WallPieceBlock extends WallBlock implements PieceBlock {
 	public WallPieceBlock(PieceSet set) {
 		super(FabricBlockSettings.copyOf(set.getBase()).materialColor(set.getBase().getDefaultMapColor()));
 		this.set = set;
+	}
+	@Override
+	public MutableText getName() {
+		return asItem().getName().copy();
 	}
 
 	public Block getBlock() {

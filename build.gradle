@@ -22,6 +22,12 @@ repositories {
 	flatDir {
 		dir 'libs'
 	}
+	maven {
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
 }
 
 dependencies {
@@ -44,7 +50,9 @@ dependencies {
 	modImplementation "blue.endless:jankson:${project.jankson_version}"
 	include "blue.endless:jankson:${project.jankson_version}"
 	modImplementation(include("net.devtech:arrp:0.8.+"))
-
+	modImplementation("net.astralsapphire:AstralExtraBlocks:1.20-TC.5")
+	modImplementation "curse.maven:wthit-440979:5481039"
+	modImplementation "curse.maven:badpackets-615134:4784394"
 
 }
 
